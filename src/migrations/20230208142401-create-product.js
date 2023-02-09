@@ -23,6 +23,7 @@ module.exports = {
       },
       storeId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'Stores',
           key: 'id',
@@ -30,6 +31,7 @@ module.exports = {
       },
       categoryId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'ProductCategories',
           key: 'id',

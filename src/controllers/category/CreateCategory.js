@@ -2,10 +2,11 @@ const { ProductCategory } = require('../../models');
 
 module.exports = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, image } = req.body;
 
     const category = await ProductCategory.create({
       name,
+      image,
     });
 
     return res.status(201).send({
