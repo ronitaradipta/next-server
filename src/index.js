@@ -3,8 +3,8 @@ const express = require('express');
 const cors = require('cors');
 
 const router = require('./routes/router');
-const categoryRoute = require('./routes/product/CategoryRouter');
-const productRoute = require('./routes/product/ProductRoutes');
+const product = require('./routes/product');
+const user = require('./routes/user');
 
 const app = express();
 
@@ -15,9 +15,10 @@ app.use(cors({ origin: true, credentials: true }));
 
 app.use('/', router);
 
-app.use('/category', categoryRoute);
+app.use('/stores', user.storeRoute);
 
-app.use('/product', productRoute);
+app.use('/categories', product.CategoryRoutes);
+app.use('/products', product.ProductRoutes);
 
 app.listen(process.env.SERVER_PORT, () => {
   console.log('Server Running');

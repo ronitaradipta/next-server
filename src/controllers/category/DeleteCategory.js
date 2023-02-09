@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
     await ProductCategory.destroy({ where: { id } });
 
     return res.status(200).send({
-      message: 'updated successfully',
+      message: 'deleted successfully',
     });
   } catch (error) {
     return res.status(500).send(error.message);

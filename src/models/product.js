@@ -8,9 +8,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.Store);
+      this.belongsTo(models.Store, { as: 'store' });
       this.hasMany(models.ProductGalleries);
-      this.belongsTo(models.ProductCategory);
+      this.belongsTo(models.ProductCategory, { as: 'category' });
     }
   }
   Product.init(

@@ -1,15 +1,18 @@
-const { Product } = require('../../models');
+const { Product, Store } = require('../../models');
 
 module.exports = async (req, res) => {
   try {
-    const { name, description, price, stock, storeId, categoryId } = req.body;
+    const { id } = req.params;
+    const store = await Store.findOne({ where: { id } });
+
+    const { name, description, price, stock, categoryId } = req.body;
 
     const product = await Product.create({
       name,
       description,
       price,
       stock,
-      storeId,
+      storeId: store.id,
       categoryId,
     });
 
