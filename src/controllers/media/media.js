@@ -2,7 +2,7 @@ const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
 
-const {media} = require('../models')
+const {media} = require('../../models')
 
 // add media
 const addMedia = async (req, res) => {
