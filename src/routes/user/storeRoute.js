@@ -7,7 +7,6 @@ router.post('/', storeController.CreateStore);
 router.get('/', storeController.GetAllStores);
 router.put('/:id', storeController.UpdateStore);
 router.delete('/:id', storeController.DeleteStore);
-
 router.get('/:id/products', storeController.GetAllStoreProducts);
 
 module.exports = router;
