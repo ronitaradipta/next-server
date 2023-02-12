@@ -6,10 +6,16 @@ module.exports = async (req, res) => {
     const { name, description, city, status } = req.body;
     const store = await Store.findOne({
       where: { id: id },
-      attributes: ['name', 'description', 'city', 'status'],
+      attributes: ['name', 'description', 'city', 'status', 'userId'],
     });
     if (!store) {
       return res.status(404).send({ message: 'Store not found' });
+    }
+
+    if (req.user.userRole !== 'Admin') {
+      if (store.userId !== req.user.userId) {
+        return res.status(401).send({ message: 'Unauthorized request' });
+      }
     }
 
     await Store.update(

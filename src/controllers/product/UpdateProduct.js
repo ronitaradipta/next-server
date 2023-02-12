@@ -8,10 +8,24 @@ module.exports = async (req, res) => {
     const { name, description, price, stock, categoryId } = req.body;
     const product = await Product.findOne({
       where: { id: id },
-      attributes: ['name', 'description', 'price', 'stock', 'categoryId'],
+      attributes: [
+        'name',
+        'description',
+        'price',
+        'stock',
+        'storeId',
+        'categoryId',
+      ],
     });
+
     if (!product) {
       return res.status(404).send({ message: 'Product not found' });
+    }
+
+    if (req.user.userRole !== 'Admin') {
+      if (product.storeId !== req.user.storeId) {
+        return res.status(401).send({ message: 'Unauthorized request' });
+      }
     }
 
     await Product.update(

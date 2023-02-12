@@ -1,6 +1,7 @@
-module.exports = async () => {
+module.exports = async (req, res, next) => {
   try {
-    if (req.user.role.name !== "admin") return res.status(403).send({ msg: "Access is Prohibited" });
+    if (req.user.userRole !== 'Admin')
+      return res.status(403).send({ message: 'Access is Prohibited' });
     next();
   } catch (error) {
     console.log(error.message);

@@ -2,8 +2,7 @@ const { Product, Store, ProductGalleries } = require('../../models');
 
 module.exports = async (req, res) => {
   try {
-    const { id } = req.params;
-    const store = await Store.findOne({ where: { id } });
+    const id = req.user.storeId;
 
     const { name, description, price, stock, categoryId } = req.body;
 
@@ -12,7 +11,7 @@ module.exports = async (req, res) => {
       description,
       price,
       stock,
-      storeId: store.id,
+      storeId: id,
       categoryId,
     });
 

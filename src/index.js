@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+var cookies = require('cookie-parser');
 
 const router = require('./routes/router');
 const product = require('./routes/product');
@@ -11,6 +12,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookies());
 
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.static('images'));
@@ -24,9 +26,9 @@ app.use('/products', product.ProductRoutes);
 
 app.use('/media', media.mediaRouter);
 
-app.use('/users', user.AuthRoute);
+app.use('/auth', user.AuthRoute);
 app.use('/users', user.UserRoute);
-app.use('/users', user.AddressRoute);
+app.use('/address', user.AddressRoute);
 
 app.listen(process.env.SERVER_PORT, () => {
   console.log('Server Running');

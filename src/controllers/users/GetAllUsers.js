@@ -1,4 +1,4 @@
-const { User } = require("../../models");
+const { User, Role, Address } = require('../../models');
 
 module.exports = async (req, res) => {
   try {
@@ -8,13 +8,12 @@ module.exports = async (req, res) => {
     const result = await User.findAll({
       limit: limit,
       offset: offset,
-      attributes: ["id", "name", "email"],
+      attributes: ['id', 'name', 'email'],
       include: [
-        { model: Role, as: "Role", attributes: ["name"] },
+        { model: Role, attributes: ['name'] },
         {
           model: Address,
-          as: "Address",
-          attributes: ["Address", "regency", "city", "province", "zipcode"],
+          attributes: ['Address', 'regency', 'city', 'province', 'zipcode'],
         },
       ],
     });

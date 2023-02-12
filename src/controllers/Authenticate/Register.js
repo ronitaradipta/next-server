@@ -1,4 +1,5 @@
 const { User } = require('../../models');
+const bcrypt = require('bcrypt');
 
 module.exports = async (req, res) => {
   try {
@@ -13,7 +14,10 @@ module.exports = async (req, res) => {
       return res.status(500).send({ msg: 'Password is not match' });
 
     // email existance check
-    const isEmail = await User.findOne({ where: { email: email } });
+    const isEmail = await User.findOne({
+      where: { email: email },
+      attributes: ['id', 'name', 'email', 'password'],
+    });
     if (isEmail) return res.status(500).send({ msg: 'Email is already exist' });
 
     // Password Encryption
