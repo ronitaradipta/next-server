@@ -1,4 +1,4 @@
-const { Product, Store } = require('../../models');
+const { Product, Store, ProductGalleries } = require('../../models');
 
 module.exports = async (req, res) => {
   try {
@@ -15,6 +15,14 @@ module.exports = async (req, res) => {
       storeId: store.id,
       categoryId,
     });
+
+    // mapping the array of images from payload
+    const images = req.files.map((file) => ({
+      image: `${req.protocol}://${req.get('host')}/${file.filename}`,
+      productId: product.id,
+    }));
+
+    await ProductGalleries.bulkCreate(images);
 
     return res.status(201).send({
       message: 'successfully created',
