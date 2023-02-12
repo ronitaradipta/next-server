@@ -1,21 +1,18 @@
 const jwt = require('jsonwebtoken');
-const User = require('../../models/user');
-const Role = require('../../models/role');
 
 module.exports = async (req, res, next) => {
   try {
-    if (!req.cookies?.AccessToken)
+    if (!req.cookies.AccessToken)
       return res
         .status(401)
-        .send({ msg: 'Sessions Expired, Please Login to your Account' });
-    const decodeData = jwt.verify(process.env.AccessToken);
+        .send({ message: 'Sessions Expired, Please Login to your Account' });
 
-    const user = await User.findById({
-      where: { id: decodeData.id },
-      attributes: ['name', 'email'],
-      include: [{ model: Role, as: 'role', attributes: ['name'] }],
-    });
-    req.user = user;
+    const decodeData = jwt.verify(
+      req.cookies.AccessToken,
+      process.env.ACCESS_TOKEN
+    );
+
+    req.user = decodeData;
 
     next();
   } catch (error) {

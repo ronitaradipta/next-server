@@ -2,18 +2,9 @@ const { Address } = require('../../models');
 
 module.exports = async (req, res) => {
   try {
-    const result = await Address.findAll({
-      attributes: [
-        'id',
-        'address',
-        'regency',
-        'city',
-        'zipcode',
-        'phoneNumber',
-        'userId',
-      ],
-    });
-    if (result.length === 0) {
+    const { id } = req.params;
+    const result = await Address.findByPk(id);
+    if (!result) {
       return res
         .status(404)
         .send({ message: 'There is no address saved, try to add one' });
