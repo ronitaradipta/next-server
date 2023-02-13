@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       this.hasOne(models.Store);
       this.hasMany(models.Address);
       this.hasMany(models.Cart);
+      this.hasMany(models.Order);
+      this.hasMany(models.ProductReview);
     }
   }
   User.init(
