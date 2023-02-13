@@ -18,7 +18,15 @@ module.exports = async (req, res) => {
           { description: { [Op.like]: `%${search}%` } },
         ],
       },
-      attributes: ['name', 'description', 'price', 'stock'],
+      attributes: [
+        'id',
+        'name',
+        'description',
+        'price',
+        'stock',
+        'averageRatings',
+        'totalReview',
+      ],
       include: [
         { model: Store, as: 'store', attributes: ['name', 'city'] },
         {

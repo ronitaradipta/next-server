@@ -2,46 +2,36 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Products', {
+    await queryInterface.createTable('ProductReviews', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
-        type: Sequelize.STRING,
+      productId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Products',
+          key: 'id',
+        },
       },
-      description: {
+      userId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+      },
+      rating: {
+        type: Sequelize.INTEGER,
+        validate: {
+          min: 0,
+          max: 5,
+        },
+      },
+      comment: {
         type: Sequelize.TEXT,
-      },
-      price: {
-        type: Sequelize.INTEGER,
-      },
-      stock: {
-        type: Sequelize.INTEGER,
-      },
-      storeId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Stores',
-          key: 'id',
-        },
-      },
-      categoryId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'ProductCategories',
-          key: 'id',
-        },
-      },
-      averageRatings: {
-        type: Sequelize.FLOAT,
-      },
-      totalReview: {
-        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
@@ -54,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Products');
+    await queryInterface.dropTable('ProductReviews');
   },
 };

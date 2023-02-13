@@ -33,6 +33,8 @@ app.use('/address', user.AddressRoute);
 
 app.use('/orders', user.OrderRoute);
 
+app.use('/reviews', product.ReviewProductRoute);
+
 app.listen(process.env.SERVER_PORT, () => {
   console.log('Server Running');
 });

@@ -15,7 +15,15 @@ module.exports = async (req, res) => {
 
     const product = await Product.findAll({
       where: { categoryId: cat.id },
-      attributes: ['name', 'description', 'price', 'stock'],
+      attributes: [
+        'id',
+        'name',
+        'description',
+        'price',
+        'stock',
+        'averageRatings',
+        'totalReview',
+      ],
       include: [
         { model: Store, as: 'store', attributes: ['name', 'city'] },
         {

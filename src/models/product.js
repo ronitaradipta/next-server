@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.ProductCategory, { as: 'category' });
       this.hasMany(models.Cart);
       this.hasMany(models.OrderDetails);
+      this.hasMany(models.ProductReview);
     }
   }
   Product.init(
@@ -23,6 +24,8 @@ module.exports = (sequelize, DataTypes) => {
       stock: DataTypes.INTEGER,
       storeId: DataTypes.INTEGER,
       categoryId: DataTypes.INTEGER,
+      averageRatings: DataTypes.FLOAT,
+      totalReview: DataTypes.INTEGER,
     },
     {
       sequelize,
