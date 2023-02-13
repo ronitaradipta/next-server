@@ -14,10 +14,8 @@ const addMedia = async (req, res) => {
       });
     }
 
-    await media.create({ file: image });
-    return res.status(200).send({
-      message: 'Add image success',
-    });
+    const img = await media.create({ file: image });
+    return img;
   } catch (err) {
     return res.status(500).send({
       message: err.message,

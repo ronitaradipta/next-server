@@ -23,12 +23,15 @@ app.use('/stores', user.storeRoute);
 
 app.use('/categories', product.CategoryRoutes);
 app.use('/products', product.ProductRoutes);
+app.use('/carts', product.CartRoutes);
 
 app.use('/media', media.mediaRouter);
 
 app.use('/auth', user.AuthRoute);
 app.use('/users', user.UserRoute);
 app.use('/address', user.AddressRoute);
+
+app.use('/orders', user.OrderRoute);
 
 app.listen(process.env.SERVER_PORT, () => {
   console.log('Server Running');

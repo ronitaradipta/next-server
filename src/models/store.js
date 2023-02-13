@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.User);
       this.hasMany(models.Product);
+      this.hasMany(models.Order);
     }
   }
   Store.init(
@@ -18,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.INTEGER,
       name: DataTypes.STRING,
       description: DataTypes.TEXT,
+      image: DataTypes.STRING,
       city: DataTypes.STRING,
       status: DataTypes.BOOLEAN,
     },

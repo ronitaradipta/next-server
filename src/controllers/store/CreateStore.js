@@ -1,4 +1,5 @@
 const { Store } = require('../../models');
+const { addMedia } = require('../media/media');
 
 module.exports = async (req, res) => {
   try {
@@ -13,10 +14,13 @@ module.exports = async (req, res) => {
       return res.status(400).send({ message: 'User already has a store' });
     }
 
+    const media = await addMedia(req, res);
+
     const store = await Store.create({
       userId,
       name,
       description,
+      image: media.file,
       city,
       status,
     });
