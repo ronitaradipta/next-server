@@ -29,7 +29,8 @@ module.exports = async (req, res) => {
   //   generating access token as cookies for authentication
   const AccessToken = jwt.sign(
     { userId, userEmail, userRole, storeId },
-    process.env.ACCESS_TOKEN
+    process.env.ACCESS_TOKEN,
+    { expiresIn: '24h' }
   );
 
   return res
