@@ -3,6 +3,7 @@ const GetAllStores = require('./GetAllStores');
 const GetAllStoreProducts = require('./GetAllStoreProducts');
 const UpdateStore = require('./UpdateStore');
 const DeleteStore = require('./DeleteStore');
+const GetUserStore = require('./GetUserStore');
 
 module.exports = {
   CreateStore,
@@ -10,4 +11,5 @@ module.exports = {
   GetAllStoreProducts,
   UpdateStore,
   DeleteStore,
+  GetUserStore,
 };

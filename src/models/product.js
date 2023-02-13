@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Store, { as: 'store' });
       this.hasMany(models.ProductGalleries);
       this.belongsTo(models.ProductCategory, { as: 'category' });
+      this.hasMany(models.Cart);
+      this.hasMany(models.OrderDetails);
     }
   }
   Product.init(

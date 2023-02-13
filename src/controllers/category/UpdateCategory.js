@@ -1,4 +1,6 @@
 const { ProductCategory } = require('../../models');
+const createSlug = require('../../utils/createSlug');
+const { addMedia } = require('../media/media');
 
 module.exports = async (req, res) => {
   try {
@@ -9,9 +11,15 @@ module.exports = async (req, res) => {
       return res.status(404).send({ message: 'Category not found' });
     }
 
+    const slug = createSlug(name);
+
+    const media = await addMedia(req, res);
+
     await ProductCategory.update(
       {
         name,
+        image: media.file,
+        slug,
       },
       { where: { id } }
     );
