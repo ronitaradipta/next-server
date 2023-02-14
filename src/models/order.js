@@ -23,13 +23,17 @@ module.exports = (sequelize, DataTypes) => {
       customerDetail: DataTypes.STRING,
       shippingCost: DataTypes.INTEGER,
       totalPrice: DataTypes.INTEGER,
-      status: {
+      orderStatus: {
         type: DataTypes.ENUM,
-        values: ['new', 'in_progress', 'delivered'],
-        defaultValue: 'new',
+        values: ['pending', 'challenge', 'failure', 'success'],
+        defaultValue: 'pending',
+      },
+      shippingStatus: {
+        type: DataTypes.ENUM,
+        values: ['waiting_payment', 'new', 'in_progress', 'delivered'],
+        defaultValue: 'waiting_payment',
       },
       trackingNumber: DataTypes.STRING,
-      responseMidtrans: DataTypes.TEXT,
     },
     {
       sequelize,
