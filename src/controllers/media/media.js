@@ -6,22 +6,26 @@ const { media } = require('../../models');
 // add media
 const addMedia = async (req, res) => {
   try {
-    const image = `${req.protocol}://${req.get('host')}/${req.uploadName}`;
+    const image = `${req.protocol}://${req.get('host')}/${req.formatWebp}`;
 
     if (image === null) {
       return res.status(400).send({
         message: 'file not found',
       });
     }
-
-    const img = await media.create({ file: image });
-    return img;
+    await media.create({ file: image });
+    
+    return res.status(200).send({
+      message: 'image upload succesfully',
+    });
   } catch (err) {
+    console.log(err)
     return res.status(500).send({
       message: err.message,
     });
   }
 };
+
 
 // get all media
 const getAllMedia = async (req, res) => {
@@ -51,7 +55,7 @@ const getMediaByID = async (req, res) => {
 // update media
 
 const updateMedia = async (req, res) => {
-  const files = req.uploadName;
+  const files = req.formatWebp;
   const image = await media.findOne({
     where: {
       id: req.params.id,
