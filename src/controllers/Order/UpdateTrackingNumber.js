@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
 
     await order.update({
       trackingNumber: trackingNumber,
-      status: 'in_progress',
+      shippingStatus: 'in_progress',
     });
 
     return res.status(200).send({

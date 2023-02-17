@@ -2,40 +2,31 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Stores', {
+    await queryInterface.createTable('SellerTransactions', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      userId: {
+      storeId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
-          model: 'Users',
+          model: 'Stores',
           key: 'id',
         },
       },
-      name: {
-        type: Sequelize.STRING,
-        unique: true,
+      amount: {
+        type: Sequelize.INTEGER,
       },
-      description: {
-        type: Sequelize.TEXT,
-      },
-      image: {
-        type: Sequelize.STRING,
-      },
-      city: {
+      bankAccount: {
         type: Sequelize.STRING,
       },
       status: {
-        type: Sequelize.BOOLEAN,
-      },
-      nextCoinBalance: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
+        type: Sequelize.ENUM,
+        values: ['pending', 'success', 'failed'],
+        defaultValue: 'pending',
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -48,6 +39,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Stores');
+    await queryInterface.dropTable('SellerTransactions');
   },
 };
