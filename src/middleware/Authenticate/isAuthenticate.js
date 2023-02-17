@@ -7,14 +7,21 @@ module.exports = async (req, res, next) => {
         .status(401)
         .send({ message: 'Sessions Expired, Please Login to your Account' });
 
-    const decodeData = jwt.verify(
+    jwt.verify(
       req.cookies.AccessToken,
-      process.env.ACCESS_TOKEN
+      process.env.ACCESS_TOKEN,
+      (err, user) => {
+        if (err) {
+          if (err.name === 'TokenExpiredError') {
+            return res.status(401).json({ error: 'Token has expired' });
+          } else {
+            return res.sendStatus(403);
+          }
+        }
+        req.user = user;
+        next();
+      }
     );
-
-    req.user = decodeData;
-
-    next();
   } catch (error) {
     console.log(error.message);
   }

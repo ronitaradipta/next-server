@@ -14,18 +14,17 @@ const addMedia = async (req, res) => {
       });
     }
     await media.create({ file: image });
-    
+
     return res.status(200).send({
       message: 'image upload succesfully',
     });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return res.status(500).send({
       message: err.message,
     });
   }
 };
-
 
 // get all media
 const getAllMedia = async (req, res) => {
