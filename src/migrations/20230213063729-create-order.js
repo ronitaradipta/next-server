@@ -43,18 +43,21 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      status: {
+      orderStatus: {
         type: Sequelize.ENUM,
-        values: ['new', 'in_progress', 'delivered'],
-        defaultValue: 'new',
+        values: ['pending', 'challenge', 'failure', 'success'],
+        defaultValue: 'pending',
+        allowNull: false,
+      },
+      shippingStatus: {
+        type: Sequelize.ENUM,
+        values: ['waiting_payment', 'new', 'in_progress', 'delivered'],
+        defaultValue: 'waiting_payment',
         allowNull: false,
       },
       trackingNumber: {
         type: Sequelize.STRING,
         unique: true,
-      },
-      responseMidtrans: {
-        type: Sequelize.TEXT,
       },
       createdAt: {
         allowNull: false,

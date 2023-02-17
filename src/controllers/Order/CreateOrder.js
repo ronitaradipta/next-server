@@ -1,9 +1,25 @@
 const { Order, Cart, Product, OrderDetails } = require('../../models');
+const midtransClient = require('midtrans-client');
+
+const snap = new midtransClient.Snap({
+  isProduction: false,
+  serverKey: process.env.SERVER_KEY,
+});
 
 module.exports = async (req, res) => {
   const userId = req.user.userId;
   const storeId = req.params.id;
-  const { shippingCost } = req.body;
+  const {
+    shippingCost,
+    address,
+    regency,
+    city,
+    province,
+    zipcode,
+    name,
+    email,
+    phone,
+  } = req.body;
 
   try {
     const carts = await Cart.findAll({
@@ -35,7 +51,23 @@ module.exports = async (req, res) => {
       storeId: parseInt(storeId),
       shippingCost,
       totalPrice: total,
+      customerAddress: `${address}, ${regency}, ${city}, ${province} - ${zipcode}`,
+      customerDetail: `${name} (${phone})`,
     });
+
+    // create transaction token and url from midtrans
+    const parameters = {
+      transaction_details: {
+        order_id: order.orderNumber,
+        gross_amount: order.totalPrice,
+      },
+      customer_details: {
+        email: email,
+        phone: phone,
+      },
+    };
+
+    const transaction = await snap.createTransaction(parameters);
 
     carts.forEach(async (cart) => {
       await OrderDetails.create({
@@ -50,7 +82,13 @@ module.exports = async (req, res) => {
 
     return res.status(200).send({
       message: 'Order placed successfully',
-      data: order,
+      data: [
+        order,
+        {
+          transactionToken: transaction.token,
+          transactionUrl: transaction.redirect_url,
+        },
+      ],
     });
   } catch (error) {
     return res.status(500).send(error.message);

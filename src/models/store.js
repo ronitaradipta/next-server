@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.User);
       this.hasMany(models.Product);
       this.hasMany(models.Order);
+      this.hasMany(models.SellerTransactions);
     }
   }
   Store.init(
@@ -22,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       image: DataTypes.STRING,
       city: DataTypes.STRING,
       status: DataTypes.BOOLEAN,
+      nextCoinBalance: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
     },
     {
       sequelize,
