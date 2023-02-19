@@ -7,12 +7,9 @@ module.exports = async (req, res) => {
     const { name } = req.body;
     const slug = createSlug(name);
 
-    const img = await media.create({ file: image });
-    console.log(img);
-
     const category = await ProductCategory.create({
       name,
-      image: img.file,
+      image: image,
       slug,
     });
 

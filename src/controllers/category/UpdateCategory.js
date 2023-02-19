@@ -1,28 +1,27 @@
 const { ProductCategory } = require('../../models');
 const createSlug = require('../../utils/createSlug');
-const { addMedia } = require('../media/media');
+const removeImageFromStorage = require('../../utils/removeImageFromStorage');
 
 module.exports = async (req, res) => {
   try {
     const { id } = req.params;
     const { name } = req.body;
+    const image = `${req.protocol}://${req.get('host')}/${req.formatWebp}`;
+
     const category = await ProductCategory.findByPk(id);
     if (!category) {
       return res.status(404).send({ message: 'Category not found' });
     }
 
+    removeImageFromStorage('images', category.image);
+
     const slug = createSlug(name);
 
-    const media = await addMedia(req, res);
-
-    await ProductCategory.update(
-      {
-        name,
-        image: media.file,
-        slug,
-      },
-      { where: { id } }
-    );
+    await category.update({
+      name,
+      image: image,
+      slug,
+    });
 
     return res.status(200).send({
       message: 'updated successfully',

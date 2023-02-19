@@ -3,7 +3,15 @@ const { Store, User } = require('../../models');
 module.exports = async (req, res) => {
   try {
     const store = await Store.findAll({
-      attributes: ['id', 'name', 'description', 'city', 'status', 'userId'],
+      attributes: [
+        'id',
+        'name',
+        'description',
+        'image',
+        'city',
+        'status',
+        'userId',
+      ],
       include: [{ model: User, attributes: ['name', 'email'] }],
     });
 

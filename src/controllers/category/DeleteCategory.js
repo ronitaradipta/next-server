@@ -1,4 +1,5 @@
 const { ProductCategory } = require('../../models');
+const removeImageFromStorage = require('../../utils/removeImageFromStorage');
 
 module.exports = async (req, res) => {
   try {
@@ -8,7 +9,9 @@ module.exports = async (req, res) => {
       return res.status(404).send({ message: 'Category not found' });
     }
 
-    await ProductCategory.destroy({ where: { id } });
+    removeImageFromStorage('images', category.image);
+
+    await category.destroy();
 
     return res.status(200).send({
       message: 'deleted successfully',

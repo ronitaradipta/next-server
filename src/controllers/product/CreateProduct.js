@@ -1,10 +1,17 @@
-const { Product, Store, ProductGalleries } = require('../../models');
+const sharp = require('sharp');
+const { Product, ProductGalleries } = require('../../models');
 
 module.exports = async (req, res) => {
   try {
     const id = req.user.storeId;
 
     const { name, description, price, stock, categoryId } = req.body;
+
+    if (req.files.length === 0) {
+      return res
+        .status(400)
+        .send({ error: 'You must upload at least 1 image' });
+    }
 
     const product = await Product.create({
       name,

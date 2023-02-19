@@ -5,16 +5,16 @@ const upload = require('../../middleware/upload');
 
 const router = express.Router();
 
-router.post(
-  '/',
-  isAuthenticate,
-  upload.single('image'),
-  storeController.CreateStore
-);
+router.post('/', isAuthenticate, storeController.CreateStore);
 router.get('/', storeController.GetAllStores);
 router.get('/user', isAuthenticate, storeController.GetUserStore);
 
-router.put('/:id', isAuthenticate, storeController.UpdateStore);
+router.put(
+  '/',
+  isAuthenticate,
+  upload.single('image'),
+  storeController.UpdateStore
+);
 router.delete('/:id', isAuthenticate, isAdmin, storeController.DeleteStore);
 router.get('/:id/products', storeController.GetAllStoreProducts);
 

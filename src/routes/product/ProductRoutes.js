@@ -11,6 +11,7 @@ router.post(
   upload.array('images'),
   productController.CreateProduct
 );
+
 router.get('/', productController.GetAllProducts);
 router.get('/', productController.GetProductBySearch);
 router.get('/', productController.GetProductsByCategory);

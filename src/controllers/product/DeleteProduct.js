@@ -1,5 +1,6 @@
 const { Product, ProductGalleries } = require('../../models');
-const fs = require('fs');
+
+const removeImageFromStorage = require('../../utils/removeImageFromStorage');
 
 module.exports = async (req, res) => {
   try {
@@ -10,14 +11,7 @@ module.exports = async (req, res) => {
 
     //delete images from folder images
     images.forEach(async (image) => {
-      const static = image.dataValues.image.split('/').pop();
-      const filePath = `images/${static}`;
-      fs.unlink(filePath, (error) => {
-        if (error) {
-          console.error(error);
-          return;
-        }
-      });
+      removeImageFromStorage('images', image.image);
     });
 
     const product = await Product.findOne({

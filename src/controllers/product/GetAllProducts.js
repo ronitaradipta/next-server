@@ -7,8 +7,8 @@ const {
 
 module.exports = async (req, res) => {
   try {
-    const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-    const offset = req.query.offset ? parseInt(req.query.offset) : 0;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = parseInt(req.query.offset) || 0;
 
     const product = await Product.findAll({
       limit: limit,
@@ -39,6 +39,7 @@ module.exports = async (req, res) => {
     return res.status(200).send({
       message: 'success',
       data: product,
+      totalProducts: limit,
     });
   } catch (error) {
     return res.status(500).send(error.message);
