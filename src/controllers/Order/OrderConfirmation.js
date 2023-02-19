@@ -4,11 +4,13 @@ module.exports = async (req, res) => {
   try {
     const orderId = req.params.id;
 
-    const order = await Order.findOne(orderId, {
+    const order = await Order.findOne({
+      where: { id: orderId },
       include: {
         model: OrderDetails,
         include: {
           model: Product,
+          as: 'product',
           attributes: ['price'],
         },
       },
@@ -24,15 +26,9 @@ module.exports = async (req, res) => {
     });
 
     // update NextCoin Balance
-    const totalPrice = order.orderDetails.reduce((total, orderDetail) => {
-      const productPrice = orderDetail.product.price;
-      const quantity = orderDetail.quantity;
-      return total + productPrice * quantity;
-    }, 0);
-
-    await Store.update(
-      { nextCoinBalance: sequelize.literal(`balance + ${totalPrice}`) },
-      { where: { id: order.sellerId } }
+    await Store.increment(
+      { nextCoinBalance: order.totalPrice },
+      { where: { id: order.storeId } }
     );
 
     return res.status(200).send({

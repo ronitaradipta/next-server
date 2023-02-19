@@ -35,11 +35,15 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      totalPrice: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       shippingCost: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      totalPrice: {
+      amountToPay: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },

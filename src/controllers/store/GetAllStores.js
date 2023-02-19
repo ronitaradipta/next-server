@@ -14,6 +14,7 @@ module.exports = async (req, res) => {
         'image',
         'city',
         'status',
+        'nextCoinBalance',
         'userId',
       ],
       include: [{ model: User, attributes: ['name', 'email'] }],
