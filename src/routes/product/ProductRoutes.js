@@ -13,8 +13,6 @@ router.post(
 );
 
 router.get('/', productController.GetAllProducts);
-router.get('/', productController.GetProductBySearch);
-router.get('/', productController.GetProductsByCategory);
 router.get('/:id', productController.GetProductById);
 
 router.put(
