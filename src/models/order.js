@@ -21,8 +21,9 @@ module.exports = (sequelize, DataTypes) => {
       storeId: DataTypes.INTEGER,
       customerAddress: DataTypes.STRING,
       customerDetail: DataTypes.STRING,
-      shippingCost: DataTypes.INTEGER,
       totalPrice: DataTypes.INTEGER,
+      shippingCost: DataTypes.INTEGER,
+      amountToPay: DataTypes.INTEGER,
       orderStatus: {
         type: DataTypes.ENUM,
         values: ['pending', 'challenge', 'failure', 'success'],

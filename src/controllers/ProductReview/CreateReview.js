@@ -9,11 +9,13 @@ module.exports = async (req, res) => {
       return res.status(400).send({ error: 'Rating must be between 1 and 5' });
     }
 
-    const order = await Order.findOne({
+    //check if user has already purchased product before review
+    const order = await Order.count({
       where: {
         userId,
       },
-      includes: [{ model: OrderDetails, where: { productId } }],
+      include: [{ model: OrderDetails, where: { productId } }],
+      distinct: true,
     });
 
     if (!order) {
@@ -23,7 +25,6 @@ module.exports = async (req, res) => {
     }
 
     // check if user has already reviewed the product
-
     const existingReviews = await ProductReview.count({
       where: {
         userId,

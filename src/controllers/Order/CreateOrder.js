@@ -42,15 +42,18 @@ module.exports = async (req, res) => {
       });
     }
 
-    const total = carts.reduce((acc, cart) => {
-      return acc + cart.product.price * cart.quantity + shippingCost;
+    const totalPrice = carts.reduce((acc, cart) => {
+      return acc + cart.product.price * cart.quantity;
     }, 0);
+
+    const amountToPay = totalPrice + shippingCost;
 
     const order = await Order.create({
       userId,
       storeId: parseInt(storeId),
+      totalPrice,
       shippingCost,
-      totalPrice: total,
+      amountToPay,
       customerAddress: `${address}, ${regency}, ${city}, ${province} - ${zipcode}`,
       customerDetail: `${name} (${phone})`,
     });
@@ -59,7 +62,7 @@ module.exports = async (req, res) => {
     const parameters = {
       transaction_details: {
         order_id: order.orderNumber,
-        gross_amount: order.totalPrice,
+        gross_amount: order.amountToPay,
       },
       customer_details: {
         email: email,
