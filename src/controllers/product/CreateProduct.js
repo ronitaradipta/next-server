@@ -1,11 +1,15 @@
-const sharp = require('sharp');
-const { Product, ProductGalleries } = require('../../models');
+const { Product, ProductGalleries, sequelize } = require('../../models');
 
 module.exports = async (req, res) => {
+  const t = await sequelize.transaction();
   try {
     const id = req.user.storeId;
 
     const { name, description, price, stock, categoryId } = req.body;
+
+    if (!id) {
+      return res.status(400).send({ error: "you don't have a store" });
+    }
 
     if (req.files.length === 0) {
       return res
@@ -13,14 +17,17 @@ module.exports = async (req, res) => {
         .send({ error: 'You must upload at least 1 image' });
     }
 
-    const product = await Product.create({
-      name,
-      description,
-      price,
-      stock,
-      storeId: id,
-      categoryId,
-    });
+    const product = await Product.create(
+      {
+        name,
+        description,
+        price,
+        stock,
+        storeId: id,
+        categoryId,
+      },
+      { transaction: t }
+    );
 
     // mapping the array of images from payload
     const images = req.files.map((file) => ({
@@ -28,13 +35,16 @@ module.exports = async (req, res) => {
       productId: product.id,
     }));
 
-    await ProductGalleries.bulkCreate(images);
+    await ProductGalleries.bulkCreate(images, { transaction: t });
+
+    await t.commit();
 
     return res.status(201).send({
       message: 'successfully created',
       data: product,
     });
   } catch (error) {
+    await t.rollback();
     return res.status(500).send(error.message);
   }
 };

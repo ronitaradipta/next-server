@@ -1,4 +1,10 @@
-const { Order, Cart, Product, OrderDetails } = require('../../models');
+const {
+  Order,
+  Cart,
+  Product,
+  OrderDetails,
+  sequelize,
+} = require('../../models');
 const midtransClient = require('midtrans-client');
 
 const snap = new midtransClient.Snap({
@@ -21,6 +27,7 @@ module.exports = async (req, res) => {
     phone,
   } = req.body;
 
+  const t = await sequelize.transaction();
   try {
     const carts = await Cart.findAll({
       where: {
@@ -48,15 +55,18 @@ module.exports = async (req, res) => {
 
     const amountToPay = totalPrice + shippingCost;
 
-    const order = await Order.create({
-      userId,
-      storeId: parseInt(storeId),
-      totalPrice,
-      shippingCost,
-      amountToPay,
-      customerAddress: `${address}, ${regency}, ${city}, ${province} - ${zipcode}`,
-      customerDetail: `${name} (${phone})`,
-    });
+    const order = await Order.create(
+      {
+        userId,
+        storeId: parseInt(storeId),
+        totalPrice,
+        shippingCost,
+        amountToPay,
+        customerAddress: `${address}, ${regency}, ${city}, ${province} - ${zipcode}`,
+        customerDetail: `${name} (${phone})`,
+      },
+      { transaction: t }
+    );
 
     // create transaction token and url from midtrans
     const parameters = {
@@ -72,6 +82,7 @@ module.exports = async (req, res) => {
 
     const transaction = await snap.createTransaction(parameters);
 
+    // delete cart after checkout completes
     carts.forEach(async (cart) => {
       await OrderDetails.create({
         orderId: order.id,
@@ -80,8 +91,17 @@ module.exports = async (req, res) => {
         price: cart.product.price,
       });
 
+      // decrease product stock when customer successfully creates a new order
+      await Product.decrement(
+        'stock',
+        { by: cart.quantity, where: { id: cart.product.id } },
+        { transaction: t }
+      );
+
       cart.destroy();
     });
+
+    await t.commit();
 
     return res.status(200).send({
       message: 'Order placed successfully',
@@ -94,6 +114,7 @@ module.exports = async (req, res) => {
       ],
     });
   } catch (error) {
+    await t.rollback();
     return res.status(500).send(error.message);
   }
 };
