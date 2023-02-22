@@ -1,18 +1,18 @@
-const { Product, ProductGalleries } = require('../../models');
+const { Product, ProductGalleries, sequelize } = require('../../models');
 
 const removeImageFromStorage = require('../../utils/removeImageFromStorage');
 
 module.exports = async (req, res) => {
+  const t = await sequelize.transaction();
   try {
     const { id } = req.params;
+
     const images = await ProductGalleries.findAll({ where: { productId: id } });
 
-    await ProductGalleries.destroy({ where: { productId: id } });
-
-    //delete images from folder images
-    images.forEach(async (image) => {
-      removeImageFromStorage('images', image.image);
-    });
+    await ProductGalleries.destroy(
+      { where: { productId: id } },
+      { transaction: t }
+    );
 
     const product = await Product.findOne({
       where: { id: id },
@@ -36,12 +36,22 @@ module.exports = async (req, res) => {
       }
     }
 
-    await Product.destroy({ where: { id } });
+    await Product.destroy({ where: { id } }, { transaction: t });
+
+    t.afterCommit(() => {
+      //delete images from folder images
+      images.forEach(async (image) => {
+        removeImageFromStorage('images', image.image);
+      });
+    });
+
+    await t.commit();
 
     return res.status(200).send({
       message: 'deleted successfully',
     });
   } catch (error) {
+    await t.rollback();
     return res.status(500).send(error.message);
   }
 };

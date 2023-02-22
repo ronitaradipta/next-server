@@ -1,10 +1,12 @@
-const { Product, ProductGalleries } = require('../../models');
+const { Product, ProductGalleries, sequelize } = require('../../models');
 const removeImageFromStorage = require('../../utils/removeImageFromStorage');
 
 module.exports = async (req, res) => {
+  const t = await sequelize.transaction();
   try {
     const { id } = req.params;
     const { name, description, price, stock, categoryId } = req.body;
+
     const product = await Product.findOne({
       where: { id: id },
       attributes: [
@@ -28,13 +30,16 @@ module.exports = async (req, res) => {
       }
     }
 
-    await product.update({
-      name,
-      description,
-      price,
-      stock,
-      categoryId,
-    });
+    await product.update(
+      {
+        name,
+        description,
+        price,
+        stock,
+        categoryId,
+      },
+      { transaction: t }
+    );
 
     const images = await ProductGalleries.findAll({
       where: {
@@ -47,23 +52,29 @@ module.exports = async (req, res) => {
       removeImageFromStorage('images', image.image);
     });
 
-    await ProductGalleries.destroy({
-      where: {
-        productId: req.params.id,
+    await ProductGalleries.destroy(
+      {
+        where: {
+          productId: req.params.id,
+        },
       },
-    });
+      { transaction: t }
+    );
 
     const newImages = req.files.map((file) => ({
       image: `${req.protocol}://${req.get('host')}/${file.filename}`,
       productId: id,
     }));
 
-    await ProductGalleries.bulkCreate(newImages);
+    await ProductGalleries.bulkCreate(newImages, { transaction: t });
+
+    await t.commit();
 
     return res.status(200).send({
       message: 'updated successfully',
     });
   } catch (error) {
+    await t.rollback();
     return res.status(500).send(error.message);
   }
 };

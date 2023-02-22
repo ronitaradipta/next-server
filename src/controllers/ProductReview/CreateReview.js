@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
     }
 
     //check if user has already purchased product before review
-    const order = await Order.count({
+    const order = await Order.findAll({
       where: {
         userId,
       },
@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
       distinct: true,
     });
 
-    if (!order) {
+    if (!order.length) {
       return res.status(400).send({
         error: 'You must purchase the product before writing a review',
       });

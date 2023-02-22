@@ -1,5 +1,5 @@
 const midtransClient = require('midtrans-client');
-const { Order } = require('../../models');
+const { Order, OrderDetails, Product } = require('../../models');
 
 const snap = new midtransClient.Snap({
   isProduction: false,
@@ -39,17 +39,32 @@ module.exports = async (req, res) => {
       orderStatus = 'pending';
     }
 
-    await Order.update(
-      { orderStatus: orderStatus },
-      { where: { orderNumber: orderId } }
-    );
+    const order = await Order.findOne({
+      where: { orderNumber: orderId },
+      attributes: ['id', 'orderNumber', 'orderStatus'],
+      include: [{ model: OrderDetails, attributes: ['quantity', 'productId'] }],
+    });
 
     if (orderStatus === 'success') {
-      await Order.update(
+      order.update(
         { shippingStatus: 'new' },
         { where: { orderNumber: orderId } }
       );
+    } else if (orderStatus === 'failure') {
+      // restore product stock
+      order.OrderDetails.forEach(async (item) => {
+        const { productId, quantity } = item;
+        const product = await Product.findByPk(productId, {
+          attributes: ['id', 'name', 'price', 'stock', 'storeId'],
+        });
+
+        const newStock = product.stock + quantity;
+
+        await product.update({ stock: newStock });
+      });
     }
+
+    order.update({ orderStatus: orderStatus });
 
     return res.status(200).send({
       message: 'Order status updated',

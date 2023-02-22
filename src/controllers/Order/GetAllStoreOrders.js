@@ -1,4 +1,4 @@
-const { Order } = require('../../models');
+const { Order, OrderDetails } = require('../../models');
 
 module.exports = async (req, res) => {
   try {
@@ -6,6 +6,7 @@ module.exports = async (req, res) => {
 
     const orders = await Order.findAll({
       where: { storeId },
+      include: [{ model: OrderDetails }],
     });
 
     return res.status(200).send({
