@@ -1,11 +1,34 @@
 const express = require('express');
 const productController = require('../../controllers/product');
+const { isAuthenticate } = require('../../middleware/Authenticate');
+// change this :
+// const upload = require('../../middleware/upload');
+// const format = require('../../middleware/format');
+
+// and replace with :
+const { FileUpload, FileResize } = require('../../middleware/Media');
 
 const router = express.Router();
 
-router.post('/', productController.CreateProduct);
-// router.get('/', productController.GetAllCategories);
-// router.put('/:id', productController.UpdateCategory);
-// router.delete('/:id', productController.DeleteCategory);
+router.post(
+  '/',
+  isAuthenticate,
+  FileUpload.array('images'),
+  FileResize,
+  productController.CreateProduct
+);
+
+router.get('/', productController.GetAllProducts);
+router.get('/:id', productController.GetProductById);
+
+router.put(
+  '/:id',
+  isAuthenticate,
+  FileUpload.array('images'),
+  FileResize,
+  productController.UpdateProduct
+);
+
+router.delete('/:id', isAuthenticate, productController.DeleteProduct);
 
 module.exports = router;
