@@ -1,14 +1,20 @@
 const express = require('express');
 const productController = require('../../controllers/product');
 const { isAuthenticate } = require('../../middleware/Authenticate');
-const upload = require('../../middleware/upload');
+// change this :
+// const upload = require('../../middleware/upload');
+// const format = require('../../middleware/format');
+
+// and replace with :
+const { FileUpload, FileResize } = require('../../middleware/Media');
 
 const router = express.Router();
 
 router.post(
   '/',
   isAuthenticate,
-  upload.array('images'),
+  FileUpload.array('images'),
+  FileResize,
   productController.CreateProduct
 );
 
@@ -18,7 +24,8 @@ router.get('/:id', productController.GetProductById);
 router.put(
   '/:id',
   isAuthenticate,
-  upload.array('images'),
+  FileUpload.array('images'),
+  FileResize,
   productController.UpdateProduct
 );
 

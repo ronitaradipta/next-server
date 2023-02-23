@@ -1,8 +1,12 @@
 const express = require('express');
 const categoryController = require('../../controllers/category');
 const { isAuthenticate, isAdmin } = require('../../middleware/Authenticate');
-const upload = require('../../middleware/upload');
-const format = require('../../middleware/format');
+// change this :
+// const upload = require('../../middleware/upload');
+// const format = require('../../middleware/format');
+
+// and replace with :
+const { FileUpload, FileResize } = require('../../middleware/Media');
 
 const router = express.Router();
 
@@ -10,8 +14,8 @@ router.post(
   '/',
   isAuthenticate,
   isAdmin,
-  upload.single('image'),
-  format,
+  FileUpload.single('image'),
+  FileResize,
   categoryController.CreateCategory
 );
 
@@ -21,8 +25,8 @@ router.put(
   '/:id',
   isAuthenticate,
   isAdmin,
-  upload.single('image'),
-  format,
+  FileUpload.single('image'),
+  FileResize,
   categoryController.UpdateCategory
 );
 router.delete(

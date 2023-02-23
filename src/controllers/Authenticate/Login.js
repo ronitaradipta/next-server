@@ -25,10 +25,10 @@ module.exports = async (req, res) => {
   const userEmail = user.email;
   const userRole = user.Role.dataValues.name;
   const storeId = user.Store.dataValues.id;
-
+  const storeName = user.Store.dataValues.name;
   //   generating access token as cookies for authentication
   const AccessToken = jwt.sign(
-    { userId, userEmail, userRole, storeId },
+    { userId, userEmail, userRole, storeId, storeName },
     process.env.ACCESS_TOKEN,
     { expiresIn: '24h' }
   );
