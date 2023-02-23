@@ -23,9 +23,9 @@ module.exports = async (req, res) => {
 
   const userId = user.id;
   const userEmail = user.email;
-  const userRole = user.Role.dataValues.name;
-  const storeId = user.Store.dataValues.id;
-  const storeName = user.Store.dataValues.name;
+  const userRole = user.Role.name;
+  const storeId = user.Store?.id;
+  const storeName = user.Store?.name;
   //   generating access token as cookies for authentication
   const AccessToken = jwt.sign(
     { userId, userEmail, userRole, storeId, storeName },

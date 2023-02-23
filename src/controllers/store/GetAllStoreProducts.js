@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
     const { id } = req.params;
 
     const products = await Product.findAll({
-      attributes: ['name', 'description', 'price', 'stock', 'categoryId'],
+      attributes: ['id', 'name', 'description', 'price', 'stock', 'categoryId'],
       include: [
         { model: Store, as: 'store', where: { id } },
         {

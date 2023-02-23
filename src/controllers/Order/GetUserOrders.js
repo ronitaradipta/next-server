@@ -2,19 +2,19 @@ const { Order, OrderDetails } = require('../../models');
 
 module.exports = async (req, res) => {
   try {
-    const storeId = req.user.storeId;
+    const userId = req.user.userId;
     const { limit, page } = req.query;
     const dataPerPage = parseInt(limit) || 10;
     const currentPage = parseInt(page) || 1;
 
-    if (!storeId) {
-      return res.status(400).send({ error: "You don't have a store" });
+    if (!userId) {
+      return res.status(400).send({ error: 'Invalid user id' });
     }
 
     const orders = await Order.findAndCountAll({
       limit: dataPerPage,
       offset: (currentPage - 1) * dataPerPage,
-      where: { storeId },
+      where: { userId },
       attributes: [
         'id',
         'orderNumber',
@@ -30,7 +30,6 @@ module.exports = async (req, res) => {
         'trackingNumber',
       ],
       include: [{ model: OrderDetails }],
-      distinct: true,
     });
 
     // calculate total page needed
@@ -38,6 +37,7 @@ module.exports = async (req, res) => {
 
     return res.status(200).send({
       message: 'success',
+      data: orders,
       data: orders.rows,
       totalData: orders.count,
       currentPage,
