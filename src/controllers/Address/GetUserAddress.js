@@ -4,9 +4,16 @@ module.exports = async (req, res) => {
   try {
     const result = await Address.findAll({
       where: { userId: req.user.userId },
-      attributes: ['address', 'regency', 'city', 'zipcode', 'phoneNumber'],
+      attributes: [
+        'id',
+        'address',
+        'regency',
+        'city',
+        'zipcode',
+        'phoneNumber',
+      ],
     });
-    if (!result) {
+    if (!result.length) {
       return res
         .status(404)
         .send({ message: 'There is no address saved, try to add one' });

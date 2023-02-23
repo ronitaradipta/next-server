@@ -14,4 +14,6 @@ router.put('/:id/confirm-order', isAuthenticate, Order.OrderConfirmation);
 
 router.get('/store', isAuthenticate, Order.GetAllStoreOrders);
 
+router.get('/user', isAuthenticate, Order.GetUserOrders);
+
 module.exports = router;
