@@ -10,18 +10,6 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'images');
-//   },
-//   filename: (req, file, cb) => {
-//     const now = Date.now();
-//     req.uploadName = now + path.extname(file.originalname);
-//     req.formatWebp = now + '.webp';
-//     cb(null, req.uploadName);
-//   },
-// });
-
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {

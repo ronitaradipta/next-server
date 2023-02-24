@@ -6,7 +6,7 @@ const { media } = require('../../models');
 // add media
 const addMedia = async (req, res) => {
   try {
-    const image = `${req.protocol}://${req.get('host')}/${req.formatWebp}`;
+    const image = req.file.path;
 
     if (image === null) {
       return res.status(400).send({
