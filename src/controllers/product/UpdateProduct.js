@@ -1,5 +1,4 @@
 const { Product, ProductGalleries, sequelize } = require('../../models');
-const removeImageFromStorage = require('../../utils/removeImageFromStorage');
 
 module.exports = async (req, res) => {
   const t = await sequelize.transaction();
@@ -47,11 +46,6 @@ module.exports = async (req, res) => {
       },
     });
 
-    //delete images from folder images
-    images.forEach(async (image) => {
-      removeImageFromStorage('images', image.image);
-    });
-
     await ProductGalleries.destroy(
       {
         where: {
@@ -62,7 +56,7 @@ module.exports = async (req, res) => {
     );
 
     const newImages = req.files.map((file) => ({
-      image: `${req.protocol}://${req.get('host')}/${file.filename}`,
+      image: file.path,
       productId: id,
     }));
 

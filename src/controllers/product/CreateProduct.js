@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
 
     // mapping the array of images from payload
     const images = req.files.map((file) => ({
-      image: `${req.protocol}://${req.get('host')}/${file.filename}`,
+      image: file.path,
       productId: product.id,
     }));
 

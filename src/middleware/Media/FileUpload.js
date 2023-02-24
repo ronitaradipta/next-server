@@ -1,15 +1,38 @@
 const multer = require('multer');
 const path = require('path');
+const { v2: cloudinary } = require('cloudinary');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'images');
-  },
-  filename: (req, file, cb) => {
-    const now = Date.now();
-    req.uploadName = now + path.extname(file.originalname);
-    req.formatWebp = now + '.webp';
-    cb(null, req.uploadName);
+// cloudinary config
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
+
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'images');
+//   },
+//   filename: (req, file, cb) => {
+//     const now = Date.now();
+//     req.uploadName = now + path.extname(file.originalname);
+//     req.formatWebp = now + '.webp';
+//     cb(null, req.uploadName);
+//   },
+// });
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'images',
+    format: async (req, file) => 'jpeg',
+    public_id: (req, file) => {
+      const now = Date.now();
+      req.uploadName = now;
+      return req.uploadName;
+    },
+    transformation: [{ width: 350, height: 500, crop: 'limit' }],
   },
 });
 
