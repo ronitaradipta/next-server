@@ -35,6 +35,8 @@ app.use('/orders', user.OrderRoute);
 
 app.use('/reviews', product.ReviewProductRoute);
 
+app.use('/seller-transactions', user.SellerTransactionsRoute);
+
 app.listen(process.env.SERVER_PORT, () => {
   console.log('Server Running');
 });

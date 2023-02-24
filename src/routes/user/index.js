@@ -3,6 +3,7 @@ const AuthRoute = require('./AuthRoute');
 const UserRoute = require('./UserRoute');
 const AddressRoute = require('./AddressRoute');
 const OrderRoute = require('./OrderRoute');
+const SellerTransactionsRoute = require('./SellerTransactionsRoute');
 
 module.exports = {
   storeRoute,
@@ -10,4 +11,5 @@ module.exports = {
   UserRoute,
   AddressRoute,
   OrderRoute,
+  SellerTransactionsRoute,
 };

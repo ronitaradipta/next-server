@@ -1,7 +1,7 @@
 const express = require('express');
 const storeController = require('../../controllers/store');
 const { isAuthenticate, isAdmin } = require('../../middleware/Authenticate');
-const upload = require('../../middleware/upload');
+const { FileUpload, FileResize } = require('../../middleware/Media');
 
 const router = express.Router();
 
@@ -12,7 +12,8 @@ router.get('/user', isAuthenticate, storeController.GetUserStore);
 router.put(
   '/',
   isAuthenticate,
-  upload.single('image'),
+  FileUpload.single('image'),
+  FileResize,
   storeController.UpdateStore
 );
 router.delete('/:id', isAuthenticate, isAdmin, storeController.DeleteStore);
