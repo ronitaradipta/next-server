@@ -17,10 +17,7 @@ module.exports = async (req, res, next) => {
       // for multiple images file upload : the size will be reduced and create a watermark
     } else {
       await req.files.map((file) => {
-        const newFileName = `next_commerce_${file.originalname.replace(
-          /\..+$/,
-          ''
-        )}-${Date.now()}.webp`;
+        const newFileName = `next_commerce_${Date.now()}.webp`;
         file.filename = newFileName;
 
         // adding custom watermark on image using storename
