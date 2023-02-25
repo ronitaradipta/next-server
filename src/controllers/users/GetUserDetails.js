@@ -1,16 +1,15 @@
-const { User } = require("../../models");
+const { User, Role, Address } = require('../../models');
 
 module.exports = async (req, res) => {
   try {
-    const result = await User.findById({
-      where: { id: req.user.id },
-      attributes: ["name", "email"],
+    const result = await User.findOne({
+      where: { id: req.user.userId },
+      attributes: ['id', 'name', 'email'],
       include: [
-        { model: Role, as: "Role", attributes: ["name"] },
+        { model: Role, attributes: ['name'] },
         {
           model: Address,
-          as: "Address",
-          attributes: ["Address", "regency", "city", "province", "zipcode"],
+          attributes: ['Address', 'regency', 'city', 'province', 'zipcode'],
         },
       ],
     });

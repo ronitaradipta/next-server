@@ -1,4 +1,5 @@
 const { Product, ProductGalleries, sequelize } = require('../../models');
+const removeCloudinaryImage = require('../../utils/removeCloudinaryImage');
 
 module.exports = async (req, res) => {
   const t = await sequelize.transaction();
@@ -42,14 +43,14 @@ module.exports = async (req, res) => {
 
     const images = await ProductGalleries.findAll({
       where: {
-        productId: req.params.id,
+        productId: id,
       },
     });
 
     await ProductGalleries.destroy(
       {
         where: {
-          productId: req.params.id,
+          productId: id,
         },
       },
       { transaction: t }
@@ -61,6 +62,13 @@ module.exports = async (req, res) => {
     }));
 
     await ProductGalleries.bulkCreate(newImages, { transaction: t });
+
+    t.afterCommit(() => {
+      //delete images from folder images
+      images.forEach(async (image) => {
+        removeCloudinaryImage(image.image);
+      });
+    });
 
     await t.commit();
 

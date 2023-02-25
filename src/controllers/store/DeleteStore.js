@@ -1,4 +1,5 @@
 const { Store } = require('../../models');
+const removeCloudinaryImage = require('../../utils/removeCloudinaryImage');
 
 module.exports = async (req, res) => {
   try {
@@ -7,6 +8,10 @@ module.exports = async (req, res) => {
 
     if (!store) {
       return res.status(404).send({ message: 'Store not found' });
+    }
+
+    if (store.image) {
+      removeCloudinaryImage(store.image);
     }
 
     await store.destroy();
