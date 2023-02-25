@@ -30,14 +30,18 @@ module.exports = async (req, res) => {
         'trackingNumber',
       ],
       include: [{ model: OrderDetails }],
+      distinct: true,
     });
+
+    if (orders.count === 0) {
+      return res.status(404).send({ message: 'Transactions not found' });
+    }
 
     // calculate total page needed
     const totalPages = Math.ceil(orders.count / dataPerPage);
 
     return res.status(200).send({
       message: 'success',
-      data: orders,
       data: orders.rows,
       totalData: orders.count,
       currentPage,

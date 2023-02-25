@@ -1,7 +1,7 @@
 const express = require('express');
 const storeController = require('../../controllers/store');
 const { isAuthenticate, isAdmin } = require('../../middleware/Authenticate');
-const { FileUpload, FileResize } = require('../../middleware/Media');
+const { FileUpload } = require('../../middleware/Media');
 
 const router = express.Router();
 
@@ -13,7 +13,6 @@ router.put(
   '/',
   isAuthenticate,
   FileUpload.single('image'),
-  FileResize,
   storeController.UpdateStore
 );
 router.delete('/:id', isAuthenticate, isAdmin, storeController.DeleteStore);

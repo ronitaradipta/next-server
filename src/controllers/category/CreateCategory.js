@@ -1,15 +1,15 @@
-const { ProductCategory, media } = require('../../models');
+const { ProductCategory } = require('../../models');
 const createSlug = require('../../utils/createSlug');
 
 module.exports = async (req, res) => {
   try {
-    const image = `${req.protocol}://${req.get('host')}/${req.formatWebp}`;
+    const image = req.file.path;
     const { name } = req.body;
     const slug = createSlug(name);
 
     const category = await ProductCategory.create({
       name,
-      image: image,
+      image,
       slug,
     });
 

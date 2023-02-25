@@ -1,9 +1,10 @@
 const { Store } = require('../../models');
+const removeCloudinaryImage = require('../../utils/removeCloudinaryImage');
 
 module.exports = async (req, res) => {
   try {
     const { name, description, city, status } = req.body;
-    const image = `${req.protocol}://${req.get('host')}/${req.formatWebp}`;
+    const image = req.file.path;
 
     const store = await Store.findOne({
       where: { userId: req.user.userId },
@@ -18,8 +19,6 @@ module.exports = async (req, res) => {
       ],
     });
 
-    console.log(store);
-
     if (!store) {
       return res.status(404).send({ message: 'Store not found' });
     }
@@ -30,10 +29,14 @@ module.exports = async (req, res) => {
       }
     }
 
+    if (store.image) {
+      removeCloudinaryImage(store.image);
+    }
+
     await store.update({
       name,
       description,
-      image: image,
+      image,
       city,
       status,
     });

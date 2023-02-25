@@ -1,5 +1,5 @@
 const { ProductCategory } = require('../../models');
-const removeImageFromStorage = require('../../utils/removeImageFromStorage');
+const removeCloudinaryImage = require('../../utils/removeCloudinaryImage');
 
 module.exports = async (req, res) => {
   try {
@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
       return res.status(404).send({ message: 'Category not found' });
     }
 
-    removeImageFromStorage('images', category.image);
+    removeCloudinaryImage(category.image);
 
     await category.destroy();
 

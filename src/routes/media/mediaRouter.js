@@ -1,7 +1,7 @@
 const express = require('express');
 const mediaControler = require('../../controllers/media/media');
 
-const { FileUpload, FileResize } = require('../../middleware/Media');
+const { FileUpload } = require('../../middleware/Media');
 const router = express.Router();
 
 router.post('/upload', FileUpload.single('file'), mediaControler.addMedia);
