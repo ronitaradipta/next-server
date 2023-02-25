@@ -1,10 +1,6 @@
 const express = require('express');
 const mediaControler = require('../../controllers/media/media');
-// change this :
-// const format = require('../../middleware/format');
-// const upload = require('../../middleware/upload');
 
-// and replace with :
 const { FileUpload, FileResize } = require('../../middleware/Media');
 const router = express.Router();
 

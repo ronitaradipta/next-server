@@ -1,5 +1,4 @@
 const path = require('path');
-const fs = require('fs');
 
 const { media } = require('../../models');
 const removeCloudinaryImage = require('../../utils/removeCloudinaryImage');
@@ -55,7 +54,7 @@ const getMediaByID = async (req, res) => {
 // update media
 
 const updateMedia = async (req, res) => {
-  const files = req.formatWebp;
+  // const files = req.formatWebp;
   const image = await media.findOne({
     where: {
       id: req.params.id,
@@ -68,11 +67,9 @@ const updateMedia = async (req, res) => {
         message: 'image not found',
       });
     }
+    removeCloudinaryImage(image.file);
 
-    const imagePath = path.join(process.cwd(), 'images', image.file);
-    fs.unlinkSync(imagePath);
-
-    await image.update({ file: files });
+    await image.update({ file:req.file.path });
     return res.status(200).send({
       message: 'update image success',
     });
