@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 
 const { media } = require('../../models');
+const removeCloudinaryImage = require('../../utils/removeCloudinaryImage');
 
 // add media
 const addMedia = async (req, res) => {
@@ -96,18 +97,20 @@ const deleteMedia = async (req, res) => {
         message: 'image not found',
       });
     }
-    const imagePath = path.join(process.cwd(), 'images', image.file);
-    fs.unlinkSync(imagePath);
+
     await media.destroy({
       where: {
         id: req.params.id,
       },
     });
+
+    removeCloudinaryImage(image.file);
+
     return res.status(200).send({
       message: 'deleted successfully',
     });
   } catch (error) {
-    return res.status(500).send(error);
+    return res.status(500).send(error.message);
   }
 };
 

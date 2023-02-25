@@ -17,8 +17,8 @@ const storage = new CloudinaryStorage({
     format: async (req, file) => 'jpeg',
     public_id: (req, file) => {
       const now = Date.now();
-      req.uploadName = now;
-      return req.uploadName;
+
+      return now;
     },
     transformation: [{ width: 350, height: 500, crop: 'limit' }],
   },
