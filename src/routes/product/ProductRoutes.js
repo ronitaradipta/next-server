@@ -14,7 +14,6 @@ router.post(
   '/',
   isAuthenticate,
   FileUpload.array('images'),
-  FileResize,
   productController.CreateProduct
 );
 
@@ -25,7 +24,6 @@ router.put(
   '/:id',
   isAuthenticate,
   FileUpload.array('images'),
-  FileResize,
   productController.UpdateProduct
 );
 

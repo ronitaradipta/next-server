@@ -1,12 +1,12 @@
 const path = require('path');
-const fs = require('fs');
 
 const { media } = require('../../models');
+const removeCloudinaryImage = require('../../utils/removeCloudinaryImage');
 
 // add media
 const addMedia = async (req, res) => {
   try {
-    const image = `${req.protocol}://${req.get('host')}/${req.formatWebp}`;
+    const image = req.file.path;
 
     if (image === null) {
       return res.status(400).send({
@@ -54,7 +54,7 @@ const getMediaByID = async (req, res) => {
 // update media
 
 const updateMedia = async (req, res) => {
-  const files = req.formatWebp;
+  // const files = req.formatWebp;
   const image = await media.findOne({
     where: {
       id: req.params.id,
@@ -67,11 +67,9 @@ const updateMedia = async (req, res) => {
         message: 'image not found',
       });
     }
+    removeCloudinaryImage(image.file);
 
-    const imagePath = path.join(process.cwd(), 'images', image.file);
-    fs.unlinkSync(imagePath);
-
-    await image.update({ file: files });
+    await image.update({ file:req.file.path });
     return res.status(200).send({
       message: 'update image success',
     });
@@ -96,18 +94,20 @@ const deleteMedia = async (req, res) => {
         message: 'image not found',
       });
     }
-    const imagePath = path.join(process.cwd(), 'images', image.file);
-    fs.unlinkSync(imagePath);
+
     await media.destroy({
       where: {
         id: req.params.id,
       },
     });
+
+    removeCloudinaryImage(image.file);
+
     return res.status(200).send({
       message: 'deleted successfully',
     });
   } catch (error) {
-    return res.status(500).send(error);
+    return res.status(500).send(error.message);
   }
 };
 

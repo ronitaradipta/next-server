@@ -5,7 +5,7 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class media extends Model {}
   media.init({
-    file: DataTypes.STRING
+    file: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'media',
