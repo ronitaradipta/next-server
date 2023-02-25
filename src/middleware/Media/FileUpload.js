@@ -1,20 +1,14 @@
 const multer = require('multer');
 const path = require('path');
-const { v2: cloudinary } = require('cloudinary');
+const  cloudinary  = require('../../utils/cloudinary');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-// cloudinary config
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET,
-});
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'images',
-    format: async (req, file) => 'jpeg',
+    format: async (req, file) => 'webp',
     public_id: (req, file) => {
       const now = Date.now();
 
