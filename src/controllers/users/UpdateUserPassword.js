@@ -1,19 +1,28 @@
-const { User } = require("../../models");
+const { User } = require('../../models');
+const bcrypt = require('bcrypt');
 
 module.exports = async (req, res) => {
   try {
-    const [oldPassword, newPassword] = req.body;
-    const user = await User.findById(req.user.id);
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+    const user = await User.findByPk(req.user.userId);
     const match = await bcrypt.compare(oldPassword, user.password);
-    if (!match) return res.status(400).send({ msg: "Old password is wrong" });
+
+    if (newPassword !== confirmPassword)
+      return res.status(400).send({ message: 'Password does not match' });
+
+    if (!match)
+      return res.status(400).send({ message: 'Old password is wrong' });
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
     await User.update(
-      { password: newPassword },
+      { password: hashedPassword },
       {
-        where: { id: req.user.id },
+        where: { id: req.user.userId },
       }
     );
     return res.status(200).send({
-      message: "updated successfully",
+      message: 'updated successfully',
     });
   } catch (error) {
     return res.status(500).send(error.message);

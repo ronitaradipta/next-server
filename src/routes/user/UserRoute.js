@@ -12,7 +12,7 @@ router.put(
   isAuthenticate,
   usersController.UpdateUserDetails
 );
-router.put('/password/:id', isAuthenticate, usersController.UpdateUserPassword);
+router.put('/password', isAuthenticate, usersController.UpdateUserPassword);
 router.delete('/:id', isAuthenticate, isAdmin, usersController.DeleteUsers);
 
 module.exports = router;
