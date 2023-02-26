@@ -1,6 +1,6 @@
 const { User } = require('../../models');
 const bcrypt = require('bcrypt');
-
+const randomAvatar = require('../../utils/createAvatar');
 module.exports = async (req, res) => {
   try {
     // variable define
@@ -27,6 +27,7 @@ module.exports = async (req, res) => {
       name: name,
       email: email,
       password: HashPassword,
+      avatar: randomAvatar(),
     });
     res.status(201).send({ msg: 'Registration Success' });
   } catch (error) {
