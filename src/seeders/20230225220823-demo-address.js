@@ -160,82 +160,11 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        {
-          address: 'Jl. Kelapa Muda No. 15',
-          regency: 'Medan Menteng',
-          city: 'medan',
-          province: 'Sumatera Utara',
-          zipcode: '20255',
-          phoneNumber: '081278536234',
-          userId: 16,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          address: 'Jl. Permata Anggun no.15',
-          regency: 'Surabaya Barat',
-          city: 'Surabaya',
-          province: 'Jawa Timur',
-          zipcode: '20775',
-          phoneNumber: '081278534734',
-          userId: 16,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          address: 'Jl. Beji Timur Raya No.21',
-          regency: 'Depok Selatan',
-          city: 'Depok',
-          province: 'Jawa Barat',
-          zipcode: '20377',
-          phoneNumber: '082554336234',
-          userId: 17,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          address: 'Jl. Mekar Sari Indah, Gang Dalam No. 5A',
-          regency: 'Depok Timur',
-          city: 'Depok',
-          province: 'Jawa Barat',
-          zipcode: '20377',
-          phoneNumber: '082674336234',
-          userId: 18,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          address: 'Jl. Dago Atas No.13',
-          regency: 'Bandung Barat',
-          city: 'Bandung',
-          province: 'Jawa Barat',
-          zipcode: '20135',
-          phoneNumber: '081261556044',
-          userId: 19,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          address: 'Jl. Ir. Jendral Sudirman No. 19 Gang Mawar',
-          regency: 'Jakarta SUtara',
-          city: 'Jakarta',
-          province: 'Jakarta',
-          zipcode: '20654',
-          phoneNumber: '081264553754',
-          userId: 20,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
       ],
       {}
     );
   },
   async down(queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    await queryInterface.bulkDelete('Addresses', null, {});
   },
 };
