@@ -7,6 +7,8 @@ module.exports = async (req, res) => {
     const currentPage = parseInt(page) || 1;
 
     const store = await Store.findAndCountAll({
+      limit: dataPerPage,
+      offset: (currentPage - 1) * dataPerPage,
       attributes: [
         'id',
         'name',
