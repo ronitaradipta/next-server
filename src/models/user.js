@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.Cart);
       this.hasMany(models.Order);
       this.hasMany(models.ProductReview);
+      this.hasMany(models.Otp);
     }
   }
   User.init(
