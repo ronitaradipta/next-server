@@ -1,7 +1,7 @@
 const express = require('express');
 const usersController = require('../../controllers/users');
 const { isAdmin, isAuthenticate } = require('../../middleware/Authenticate');
-
+const {FileUpload, FileResize} = require("../../middleware/Media")
 const router = express.Router();
 
 router.get('/', isAuthenticate, isAdmin, usersController.GetAllUsers);
@@ -10,6 +10,8 @@ router.post('/', isAuthenticate, isAdmin, usersController.CreateUsers);
 router.put(
   '/profile/update',
   isAuthenticate,
+  FileUpload.single('avatar'),
+  FileResize,
   usersController.UpdateUserDetails
 );
 router.put('/password', isAuthenticate, usersController.UpdateUserPassword);
