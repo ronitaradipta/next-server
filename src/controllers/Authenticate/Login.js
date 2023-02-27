@@ -1,51 +1,47 @@
-const { User, Role, Store } = require('../../models');
-const jwt = require('jsonwebtoken');
+const { User, Role, Store, Otp } = require('../../models');
 const bcrypt = require('bcrypt');
+const speakeasy = require('speakeasy');
+const sendOtp = require('../../utils/sendOtp');
 
 module.exports = async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const user = await User.findOne({
-    where: { email: email },
-    attributes: ['id', 'name', 'email', 'password'],
-    include: [
-      { model: Role, attributes: ['id', 'name'] },
-      { model: Store, attributes: ['id', 'name', 'city'] },
-    ],
-  });
-
-  // email existance check
-  if (!user) return res.status(403).json({ msg: 'Email is not Exist' });
-
-  // password match checking
-  const match = await bcrypt.compare(password, user.password);
-  if (!match) return res.status(400).json({ msg: 'Password is Wrong' });
-
-  const userId = user.id;
-  const userEmail = user.email;
-  const userRole = user.Role.dataValues.name;
-  const storeId = user.Store.dataValues.id;
-  const storeName = user.Store.dataValues.name;
-  //   generating access token as cookies for authentication
-  const AccessToken = jwt.sign(
-    { userId, userEmail, userRole, storeId, storeName },
-    process.env.ACCESS_TOKEN,
-    { expiresIn: '24h' }
-  );
-
-  return res
-    .status(200)
-    .cookie('AccessToken', AccessToken, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 24 Hours / 1 Days expired
-      secure: true,
-    })
-    .send({
-      message: 'Login is Success',
-      data: {
-        userId,
-        userEmail,
-        AccessToken,
-      },
+    const user = await User.findOne({
+      where: { email: email },
+      attributes: ['id', 'name', 'email', 'password'],
+      include: [
+        { model: Role, attributes: ['id', 'name'] },
+        { model: Store, attributes: ['id', 'name', 'city'] },
+      ],
     });
+
+    // email existance check
+    if (!user) return res.status(403).json({ msg: 'Email is not Exist' });
+
+    // password match checking
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(400).json({ msg: 'Password is Wrong' });
+
+    // Generate OTP secret
+    const secret = speakeasy.generateSecret({ length: 20 });
+    const otp = speakeasy.totp({
+      secret: secret.base32,
+      encoding: 'base32',
+    });
+
+    // Save OTP to database
+    await Otp.create({
+      userId: user.id,
+      code: secret.base32,
+      expiresAt: new Date(Date.now() + 60000),
+    });
+
+    // Send OTP to user's email
+    await sendOtp(user.email, otp);
+
+    return res.status(200).send({ message: 'Check your email for OTP code' });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
 };
