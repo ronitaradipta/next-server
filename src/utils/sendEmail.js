@@ -1,8 +1,8 @@
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
 
 module.exports = async (options) => {
   const transporter = nodemailer.createTransport({
-    service: "gmail", // port for secure SMTP
+    service: 'gmail', // port for secure SMTP
     auth: {
       user: process.env.USER_EMAIL,
       pass: process.env.EMAIL_PASSWORD,

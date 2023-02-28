@@ -67,9 +67,27 @@ module.exports = async (req, res) => {
     // calculate total page needed
     const totalPages = Math.ceil(product.count / dataPerPage);
 
+    const data = product.rows.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        price: item.price,
+        stock: item.stock,
+        averageRatings: item.averageRatings,
+        totalReview: item.totalReview,
+        storeName: item.store.name,
+        storeCity: item.store.city,
+        storeImage: item.store.image,
+        categoryName: item.category.name,
+        categoryImage: item.category.image,
+        images: item.ProductGalleries,
+      };
+    });
+
     return res.status(200).send({
       message: 'success',
-      data: product.rows,
+      data: data,
       totalProducts: product.count,
       currentPage,
       dataPerPage,
