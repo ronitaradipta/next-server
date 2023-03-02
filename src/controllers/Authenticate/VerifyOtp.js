@@ -27,6 +27,7 @@ module.exports = async (req, res) => {
     if (!otp) {
       return res.status(400).send({ message: 'OTP code is expired' });
     }
+    console.log(otp);
 
     // Verify OTP token
     const isTokenValid = speakeasy.totp.verify({
@@ -41,7 +42,7 @@ module.exports = async (req, res) => {
     }
 
     // Delete used OTP
-    await Otp.destroy({ where: { id: otp.id } });
+    await Otp.destroy({ where: { userId: user.id } });
 
     const userId = user.id;
     const userEmail = user.email;
