@@ -1,6 +1,7 @@
 const { User } = require("../../models");
 const ResetPasswordToken = require("../../utils/ResetPasswordToken");
 const sendEmail = require("../../utils/sendEmail");
+const getTemplate = require("../../utils/emailTemplate");
 
 module.exports = async (req, res) => {
   const { email } = req.body;
@@ -9,16 +10,15 @@ module.exports = async (req, res) => {
     where: { email },
   });
 
-  if (!user) return res.status(401).send({ msg: `Email is not registered` });
+  if (!user) return res.status(401).send({ msg: `Email Kamu belum terdaftar` });
   // Get ResetPassword Token
   const resetToken = ResetPasswordToken(user);
 
   // Generate Link for password reset
-  const passwordResetURL = `${req.protocol}://${req.get("host")}/auth/reset/${resetToken}`;
+  const passwordResetURL = `${process.env.BASE_URL}/reset-password/${resetToken}`;
 
   // generate message for Email content
-  const message = `Your password recovery Link is :  \n\n ${passwordResetURL} \n\n If you have not requested this email then, please ignore it.`;
-
+  const message = getTemplate({ user, passwordResetURL });
   try {
     // send reset token to email
     await sendEmail({
@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
 
     res.status(200).send({
       success: true,
-      message: `Password Recovery Link has been sent to ${user.email},  please check your email`,
+      msg: `Password Recovery Link has been sent to ${user.email}`,
     });
   } catch (error) {
     return res.status(500).send({ msg: error.message });
