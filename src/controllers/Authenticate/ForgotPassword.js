@@ -1,7 +1,7 @@
-const { User } = require("../../models");
-const ResetPasswordToken = require("../../utils/ResetPasswordToken");
-const sendEmail = require("../../utils/sendEmail");
-const getTemplate = require("../../utils/emailTemplate");
+const { User } = require('../../models');
+const ResetPasswordToken = require('../../utils/ResetPasswordToken');
+const sendEmail = require('../../utils/sendEmail');
+const getTemplate = require('../../utils/emailTemplate');
 
 module.exports = async (req, res) => {
   const { email } = req.body;
@@ -10,7 +10,8 @@ module.exports = async (req, res) => {
     where: { email },
   });
 
-  if (!user) return res.status(401).send({ msg: `Email Kamu belum terdaftar` });
+  if (!user)
+    return res.status(401).send({ message: `Email Kamu belum terdaftar` });
   // Get ResetPassword Token
   const resetToken = ResetPasswordToken(user);
 
@@ -29,9 +30,9 @@ module.exports = async (req, res) => {
 
     res.status(200).send({
       success: true,
-      msg: `Password Recovery Link has been sent to ${user.email}`,
+      message: `Password Recovery Link has been sent to ${user.email}`,
     });
   } catch (error) {
-    return res.status(500).send({ msg: error.message });
+    return res.status(500).send({ message: error.message });
   }
 };

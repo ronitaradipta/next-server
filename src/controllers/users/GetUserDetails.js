@@ -1,4 +1,4 @@
-const { User, Role, Address } = require('../../models');
+const { User, Role, Address, user_profile } = require('../../models');
 
 module.exports = async (req, res) => {
   try {
@@ -10,6 +10,10 @@ module.exports = async (req, res) => {
         {
           model: Address,
           attributes: ['Address', 'regency', 'city', 'province', 'zipcode'],
+        },
+        {
+          model: user_profile,
+          attributes: ['avatar', 'birth_day', 'gender', 'phone_number'],
         },
       ],
     });
