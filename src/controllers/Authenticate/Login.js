@@ -43,6 +43,6 @@ module.exports = async (req, res) => {
       .status(200)
       .send({ message: 'Check your email for OTP code', data: user.email });
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send({ message: error.message });
   }
 };
