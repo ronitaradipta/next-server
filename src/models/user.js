@@ -1,6 +1,5 @@
-
-"use strict";
-const { Model } = require("sequelize");
+'use strict';
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -19,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.ProductReview);
       this.hasMany(models.Otp);
       this.hasMany(models.resetPassword);
+      this.hasOne(models.user_profile);
     }
   }
   User.init(
@@ -27,11 +27,10 @@ module.exports = (sequelize, DataTypes) => {
       email: DataTypes.STRING,
       password: DataTypes.STRING,
       roleId: DataTypes.INTEGER,
-      avatar: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: 'User',
     }
   );
   return User;

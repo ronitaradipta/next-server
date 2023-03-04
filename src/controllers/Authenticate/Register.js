@@ -1,4 +1,4 @@
-const { User } = require('../../models');
+const { User, user_profile } = require('../../models');
 const bcrypt = require('bcrypt');
 const randomAvatar = require('../../utils/createAvatar');
 module.exports = async (req, res) => {
@@ -11,27 +11,31 @@ module.exports = async (req, res) => {
 
     // password match check
     if (password !== passwordConfirm)
-      return res.status(500).send({ msg: 'Password is not match' });
+      return res.status(500).send({ message: 'Password tidak sesuai' });
 
     // email existance check
     const isEmail = await User.findOne({
       where: { email: email },
       attributes: ['id', 'name', 'email', 'password'],
     });
-    if (isEmail) return res.status(500).send({ msg: 'Email is already exist' });
+    if (isEmail)
+      return res.status(500).send({ message: 'Email telah terdaftar' });
 
     // Password Encryption
     const salt = await bcrypt.genSalt();
     const HashPassword = await bcrypt.hash(password, salt);
-    await User.create({
+    const user = await User.create({
       name: name,
       email: email,
       password: HashPassword,
+    });
+    await user_profile.create({
+      userId: user.id,
       avatar: randomAvatar(),
     });
-    res.status(201).send({ msg: 'Registration Success' });
+
+    res.status(201).send({ message: 'Registrasi Berhasil, Silahkan Login' });
   } catch (error) {
-    console.log(error);
-    return res.status(500).send(error.message);
+    return res.status(500).send({ message: error.message });
   }
 };

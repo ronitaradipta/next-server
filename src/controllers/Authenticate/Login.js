@@ -17,11 +17,11 @@ module.exports = async (req, res) => {
     });
 
     // email existance check
-    if (!user) return res.status(403).json({ msg: 'Email is not Exist' });
+    if (!user) return res.status(403).json({ message: 'Email is not Exist' });
 
     // password match checking
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(400).json({ msg: 'Password is Wrong' });
+    if (!match) return res.status(400).json({ message: 'Password is Wrong' });
 
     // Generate OTP secret
     const secret = speakeasy.generateSecret({ length: 20 });
@@ -34,13 +34,14 @@ module.exports = async (req, res) => {
     await Otp.create({
       userId: user.id,
       code: secret.base32,
-      expiresAt: new Date(Date.now() + 60000),
+      expiresAt: Date.now() + 120 * 1000,
     });
 
     // Send OTP to user's email
     await sendOtp(user.email, otp);
-
-    return res.status(200).send({ message: 'Check your email for OTP code' });
+    return res
+      .status(200)
+      .send({ message: 'Check your email for OTP code', data: user.email });
   } catch (error) {
     return res.status(500).send(error.message);
   }

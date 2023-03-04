@@ -1,4 +1,4 @@
-const { User, Role, Store, Otp } = require('../../models');
+const { User, Role, Store, Otp, user_profile } = require('../../models');
 const jwt = require('jsonwebtoken');
 const speakeasy = require('speakeasy');
 const { Op } = require('sequelize');
@@ -11,6 +11,10 @@ module.exports = async (req, res) => {
       where: { email: email },
       attributes: ['id', 'name', 'email', 'password'],
       include: [
+        {
+          model: user_profile,
+          attributes: ['phone_number', 'birth_day', 'gender', 'avatar'],
+        },
         { model: Role, attributes: ['id', 'name'] },
         { model: Store, attributes: ['id', 'name', 'city'] },
       ],
@@ -27,7 +31,6 @@ module.exports = async (req, res) => {
     if (!otp) {
       return res.status(400).send({ message: 'OTP code is expired' });
     }
-    console.log(otp);
 
     // Verify OTP token
     const isTokenValid = speakeasy.totp.verify({
@@ -45,10 +48,12 @@ module.exports = async (req, res) => {
     await Otp.destroy({ where: { userId: user.id } });
 
     const userId = user.id;
+    const userName = user.name;
     const userEmail = user.email;
     const userRole = user.Role.name;
     const storeId = user.Store?.id;
     const storeName = user.Store?.name;
+    const userAvatar = user.user_profile.avatar;
     //   generating access token as cookies for authentication
     const AccessToken = jwt.sign(
       { userId, userEmail, userRole, storeId, storeName },
@@ -66,8 +71,8 @@ module.exports = async (req, res) => {
       .send({
         message: 'Login is Success',
         data: {
-          userId,
-          userEmail,
+          userName,
+          userAvatar,
           AccessToken,
         },
       });
