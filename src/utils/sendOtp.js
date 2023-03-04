@@ -4,7 +4,7 @@ const transporter = nodemailer.createTransport({
   service: 'gmail', // port for secure SMTP
   auth: {
     user: process.env.USER_EMAIL,
-    pass: process.env.USER_PASSWORD,
+    pass: process.env.EMAIL_PASSWORD,
   },
   tls: { rejectUnauthorized: false },
 });
@@ -22,7 +22,9 @@ module.exports = (email, otpcode) => {
     transporter.sendMail(options, (err, info) => {
       if (err) {
         console.log(err);
-        return reject({ message: 'An error occurred while sending' });
+        return reject({
+          message: `An error occurred while sending, ${err.message}`,
+        });
       }
       return resolve({ message: 'email sent successfully' });
     });
