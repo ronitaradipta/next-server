@@ -56,7 +56,7 @@ module.exports = async (req, res) => {
     const userAvatar = user.user_profile.avatar;
     //   generating access token as cookies for authentication
     const AccessToken = jwt.sign(
-      { userId, userEmail, userRole, storeId, storeName },
+      { userId, userEmail, userRole, storeId, storeName, userAvatar },
       process.env.ACCESS_TOKEN,
       { expiresIn: '24h' }
     );
