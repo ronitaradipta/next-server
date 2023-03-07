@@ -1,4 +1,4 @@
-const { User, Role, Store, Otp } = require('../../models');
+const { User, Role, Store, Otp, user_profile } = require('../../models');
 const bcrypt = require('bcrypt');
 const speakeasy = require('speakeasy');
 const sendOtp = require('../../utils/sendOtp');
@@ -11,6 +11,10 @@ module.exports = async (req, res) => {
       where: { email: email },
       attributes: ['id', 'name', 'email', 'password'],
       include: [
+        {
+          model: user_profile,
+          attributes: ['gender', 'phone_number', 'avatar', 'birth_day'],
+        },
         { model: Role, attributes: ['id', 'name'] },
         { model: Store, attributes: ['id', 'name', 'city'] },
       ],
@@ -43,6 +47,6 @@ module.exports = async (req, res) => {
       .status(200)
       .send({ message: 'Check your email for OTP code', data: user.email });
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send({ message: error.message });
   }
 };
