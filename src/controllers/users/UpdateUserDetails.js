@@ -3,8 +3,11 @@ const { User, user_profile } = require('../../models');
 module.exports = async (req, res) => {
   try {
     const avatar = req.file?.path;
-    const { name, email, birth_day, phone_number, gender } = req.body;
 
+    const { name, email, birth_day, phone_number, gender } = req.body;
+    console.log(name);
+    console.log(email);
+    console.log(phone_number);
     const user = await User.findOne({
       where: { id: req.user.userId },
       attributes: ['id', 'name', 'email'],
@@ -32,28 +35,31 @@ module.exports = async (req, res) => {
       where: { userId: req.user.userId },
     });
     if (userProfile) {
-      if (birth_day !== userProfile.birth_day && birth_day !== '') {
+      if (birth_day !== userProfile.birth_day && birth_day !==undefined) {
         userProfile.birth_day = birth_day;
         await userProfile.save();
         return res
           .status(200)
           .send({ message: `Tanggal Lahir berhasil di update` });
       }
-      if (gender !== userProfile.gender) {
+      if (gender !== userProfile.gender && gender !==undefined) {
         userProfile.gender = gender;
         await userProfile.save();
         return res
           .status(200)
           .send({ message: `Jenis Kelamin berhasil di update` });
       }
-      if (phone_number !== userProfile.phone_number) {
+      if (
+        phone_number !== userProfile.phone_number &&
+        phone_number !== undefined
+      ) {
         userProfile.phone_number = phone_number;
         await userProfile.save();
         return res
           .status(200)
           .send({ message: `Nomor Telepon berhasil di update` });
       }
-      if (avatar !== userProfile.avatar && avatar !== '') {
+      if (avatar !== userProfile.avatar && avatar !== undefined) {
         userProfile.avatar = avatar;
         await userProfile.save();
         return res.status(200).send({ message: `Avatar berhasil di update` });
