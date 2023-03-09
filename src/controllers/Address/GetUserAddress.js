@@ -6,19 +6,24 @@ module.exports = async (req, res) => {
       where: { userId: req.user.userId },
       attributes: [
         'id',
+        'name',
+        'isMain',
         'address',
         'regency',
         'city',
         'zipcode',
         'phoneNumber',
+        'userId',
       ],
     });
-    if (!result.length) {
-      return res
-        .status(404)
-        .send({ message: 'There is no address saved, try to add one' });
-    }
-    return res.status(200).send(result);
+    let message =
+      result.length > 0
+        ? 'Success'
+        : ' There is no address saved, try to add one';
+    return res.status(200).send({
+      message,
+      data: result || [],
+    });
   } catch (error) {
     return res.status(500).send(error.message);
   }

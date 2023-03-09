@@ -10,5 +10,5 @@ router.get('/', isAuthenticate, isAdmin, AddressController.GetAllAddress);
 router.post('/', isAuthenticate, AddressController.CreateAddress);
 router.put('/:id', isAuthenticate, AddressController.UpdateAddress);
 router.delete('/:id', isAuthenticate, AddressController.DeleteAddress);
-
+router.put('/main/:id', isAuthenticate, AddressController.SetMainAddress);
 module.exports = router;

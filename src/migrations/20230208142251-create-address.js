@@ -9,6 +9,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      isMain: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       address: {
         type: Sequelize.TEXT,
       },
@@ -27,6 +36,7 @@ module.exports = {
       phoneNumber: {
         type: Sequelize.STRING,
       },
+
       userId: {
         type: Sequelize.INTEGER,
         references: {

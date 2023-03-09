@@ -30,26 +30,23 @@ module.exports = async (req, res) => {
         return res.status(200).send({ message: `Email berhasil di update` });
       }
     }
-
     const userProfile = await user_profile.findOne({
       where: { userId: req.user.userId },
     });
     if (userProfile) {
-      if (birth_day !== userProfile.birth_day && birth_day !==undefined) {
+      if (birth_day !== userProfile.birth_day && birth_day !== undefined) {
         userProfile.birth_day = birth_day;
         await userProfile.save();
         return res
           .status(200)
           .send({ message: `Tanggal Lahir berhasil di update` });
-      }
-      if (gender !== userProfile.gender && gender !==undefined) {
+      } else if (gender !== userProfile.gender && gender !== undefined) {
         userProfile.gender = gender;
         await userProfile.save();
         return res
           .status(200)
           .send({ message: `Jenis Kelamin berhasil di update` });
-      }
-      if (
+      } else if (
         phone_number !== userProfile.phone_number &&
         phone_number !== undefined
       ) {
@@ -58,11 +55,12 @@ module.exports = async (req, res) => {
         return res
           .status(200)
           .send({ message: `Nomor Telepon berhasil di update` });
-      }
-      if (avatar !== userProfile.avatar && avatar !== undefined) {
+      } else if (avatar !== userProfile.avatar && avatar !== undefined) {
         userProfile.avatar = avatar;
         await userProfile.save();
         return res.status(200).send({ message: `Avatar berhasil di update` });
+      } else {
+        return res.status(200).send({ message: `Tidak ada perubahan data` });
       }
     }
   } catch (error) {

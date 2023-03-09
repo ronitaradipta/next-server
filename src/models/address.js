@@ -14,6 +14,15 @@ module.exports = (sequelize, DataTypes) => {
   }
   Address.init(
     {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      isMain: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       address: DataTypes.TEXT,
       regency: DataTypes.STRING,
       city: DataTypes.STRING,
