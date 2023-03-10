@@ -8,7 +8,17 @@ const {
 
 module.exports = async (req, res) => {
   try {
-    const { limit, page, search, category } = req.query;
+    const {
+      limit,
+      page,
+      search,
+      category,
+      minPrice,
+      maxPrice,
+      city,
+      minReview,
+      minRating,
+    } = req.query;
     const dataPerPage = parseInt(limit) || 10;
     const currentPage = parseInt(page) || 1;
 
@@ -31,6 +41,39 @@ module.exports = async (req, res) => {
         return res.status(404).send({ message: 'Categories not found' });
       }
     }
+    if (city) {
+      const findCity = await Store.findOne({
+        where: { city: city },
+      });
+      if (findCity) {
+        query.storeId = findCity.id;
+      } else {
+        return res
+          .status(404)
+          .send({ message: 'product with the requested city is not found' });
+      }
+    }
+    if (minPrice && maxPrice) {
+      query.price = {
+        [Op.between]: [minPrice, maxPrice],
+      };
+    } else if (minPrice) {
+      query.price = {
+        [Op.gte]: minPrice,
+      };
+    } else if (maxPrice) {
+      query.price = {
+        [Op.lte]: maxPrice,
+      };
+    }
+    if (minReview) {
+      query.totalReview = {
+        [Op.gte]: minReview,
+      };
+    }
+    if (minRating) {
+      query.averageRatings = { [Op.gte]: minRating };
+    }
 
     const product = await Product.findAndCountAll({
       where: query,
@@ -46,7 +89,11 @@ module.exports = async (req, res) => {
         'totalReview',
       ],
       include: [
-        { model: Store, as: 'store', attributes: ['name', 'city'] },
+        {
+          model: Store,
+          as: 'store',
+          attributes: ['name', 'city'],
+        },
         {
           model: ProductCategory,
           as: 'category',
@@ -63,7 +110,6 @@ module.exports = async (req, res) => {
     if (product.count === 0) {
       return res.status(404).send({ message: 'Products not found' });
     }
-
     // calculate total page needed
     const totalPages = Math.ceil(product.count / dataPerPage);
 
