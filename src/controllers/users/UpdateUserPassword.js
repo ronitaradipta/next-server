@@ -4,6 +4,10 @@ const bcrypt = require('bcrypt');
 module.exports = async (req, res) => {
   try {
     const { oldPassword, newPassword, confirmPassword } = req.body;
+
+    if (!(oldPassword && newPassword && confirmPassword)) {
+      return res.status(400).send({ message: 'All fields must be filled' });
+    }
     const user = await User.findByPk(req.user.userId);
     const match = await bcrypt.compare(oldPassword, user.password);
 
