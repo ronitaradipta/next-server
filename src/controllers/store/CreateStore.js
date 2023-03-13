@@ -1,4 +1,5 @@
 const { Store, User, sequelize } = require('../../models');
+const randomAvatar = require('../../utils/createAvatar');
 
 module.exports = async (req, res) => {
   const t = await sequelize.transaction();
@@ -20,6 +21,7 @@ module.exports = async (req, res) => {
         name,
         description,
         city,
+        image: randomAvatar(),
         status,
       },
       { transaction: t }
