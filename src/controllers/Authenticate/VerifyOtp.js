@@ -73,6 +73,7 @@ module.exports = async (req, res) => {
         data: {
           userName,
           userAvatar,
+          storeName,
           AccessToken,
         },
       });

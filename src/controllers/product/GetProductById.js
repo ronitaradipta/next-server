@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
         'totalReview',
       ],
       include: [
-        { model: Store, as: 'store', attributes: ['name', 'city'] },
+        { model: Store, as: 'store', attributes: ['name', 'city', 'image'] },
         {
           model: ProductCategory,
           as: 'category',
