@@ -2,7 +2,7 @@ const { Address } = require('../../models');
 
 module.exports = async (req, res) => {
   try {
-    const { address, regency, city, province, zipcode, phoneNumber } = req.body;
+    const { name, address, regency, city, province, zipcode, phoneNumber } = req.body;
     const { id } = req.params;
 
     const result = await Address.findByPk(id);
@@ -19,6 +19,7 @@ module.exports = async (req, res) => {
 
     await Address.update(
       {
+        name:name,
         address: address,
         regency: regency,
         city: city,
