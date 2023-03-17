@@ -1,13 +1,9 @@
-const {
-  Cart,
-  Product,
-  ProductGalleries,
-  Store,
-  Sequelize,
-} = require('../../models');
+const { Cart, Product, ProductGalleries, Store } = require('../../models');
 
 module.exports = async (req, res) => {
   const userId = req.user.userId;
+  const storeId = req.params.storeId;
+
   try {
     const cartItems = await Cart.findAll({
       where: { userId: userId },
@@ -16,6 +12,7 @@ module.exports = async (req, res) => {
         {
           model: Product,
           as: 'product',
+          where: { storeId },
           attributes: ['id', 'name', 'price', 'storeId', 'stock'],
           include: [
             { model: ProductGalleries, attributes: ['image'] },
@@ -27,12 +24,16 @@ module.exports = async (req, res) => {
           ],
         },
       ],
-      order: [[Sequelize.literal('`product.store.name`'), 'ASC']],
     });
+
+    const totalPrice = cartItems.reduce((acc, cart) => {
+      return acc + cart.product.price * cart.quantity;
+    }, 0);
 
     const dataCart = {
       products: cartItems,
       totalItems: cartItems.length,
+      totalPrice,
     };
 
     return res.status(200).send({

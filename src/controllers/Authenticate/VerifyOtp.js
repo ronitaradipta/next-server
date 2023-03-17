@@ -71,6 +71,7 @@ module.exports = async (req, res) => {
       .send({
         message: 'Login is Success',
         data: {
+          id: userId,
           userName,
           userAvatar,
           storeName,
