@@ -3,6 +3,8 @@ const {
   Cart,
   Product,
   OrderDetails,
+  Address,
+  User,
   sequelize,
 } = require('../../models');
 const midtransClient = require('midtrans-client');
@@ -15,17 +17,7 @@ const snap = new midtransClient.Snap({
 module.exports = async (req, res) => {
   const userId = req.user.userId;
   const storeId = req.params.id;
-  const {
-    shippingCost,
-    address,
-    regency,
-    city,
-    province,
-    zipcode,
-    name,
-    email,
-    phone,
-  } = req.body;
+  const { shippingCost, address } = req.body;
 
   const t = await sequelize.transaction();
   try {
@@ -55,6 +47,21 @@ module.exports = async (req, res) => {
 
     const amountToPay = totalPrice + shippingCost;
 
+    const userAddress = await Address.findOne({
+      where: {
+        id: address,
+      },
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['name'],
+        },
+      ],
+    });
+
+    console.log(userAddress);
+
     const order = await Order.create(
       {
         userId,
@@ -62,8 +69,8 @@ module.exports = async (req, res) => {
         totalPrice,
         shippingCost,
         amountToPay,
-        customerAddress: `${address}, ${regency}, ${city}, ${province} - ${zipcode}`,
-        customerDetail: `${name} (${phone})`,
+        customerAddress: `${userAddress.address}, ${userAddress.regency}, ${userAddress.city}, ${userAddress.province} - ${userAddress.zipcode}`,
+        customerDetail: `${userAddress.user.name} (${userAddress.phoneNumber})`,
       },
       { transaction: t }
     );
@@ -75,8 +82,8 @@ module.exports = async (req, res) => {
         gross_amount: order.amountToPay,
       },
       customer_details: {
-        email: email,
-        phone: phone,
+        // email: email,
+        phone: userAddress.phone,
       },
     };
 

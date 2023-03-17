@@ -10,6 +10,7 @@ module.exports = async (req, res) => {
         {
           model: Address,
           attributes: [
+            'id',
             'name',
             'isMain',
             'Address',

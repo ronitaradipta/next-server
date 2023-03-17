@@ -1,5 +1,6 @@
 const addToCart = require('./addToCart');
 const GetUserCarts = require('./GetUserCarts');
+const GetUserCartsByStore = require('./GetUserCartsByStore');
 const UpdateCart = require('./UpdateCart');
 const DeleteCart = require('./DeleteCart');
 
@@ -8,4 +9,5 @@ module.exports = {
   GetUserCarts,
   UpdateCart,
   DeleteCart,
+  GetUserCartsByStore,
 };

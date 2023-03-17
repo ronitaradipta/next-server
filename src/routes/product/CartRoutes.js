@@ -6,6 +6,11 @@ const router = express.Router();
 
 router.post('/add', isAuthenticate, cartController.addToCart);
 router.get('/product', isAuthenticate, cartController.GetUserCarts);
+router.get(
+  '/product/:storeId',
+  isAuthenticate,
+  cartController.GetUserCartsByStore
+);
 router.put('/:id', isAuthenticate, cartController.UpdateCart);
 router.delete('/:id', isAuthenticate, cartController.DeleteCart);
 
