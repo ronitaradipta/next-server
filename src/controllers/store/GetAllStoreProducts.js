@@ -16,9 +16,15 @@ module.exports = async (req, res) => {
       ],
     });
 
+    const store = await Store.findByPk(id);
+
     return res.status(200).send({
       message: 'success',
       data: products,
+      storeName: store.name,
+      storeCity: store.city,
+      storeImage: store.image,
+      storeDescription: store.description,
     });
   } catch (error) {
     return res.status(500).send(error.message);
