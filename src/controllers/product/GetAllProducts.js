@@ -21,13 +21,14 @@ module.exports = async (req, res) => {
     } = req.query;
     const dataPerPage = parseInt(limit) || 10;
     const currentPage = parseInt(page) || 1;
+    const offset = (currentPage - 1) * dataPerPage;
 
     // check if there are any queries
     const query = {};
     if (search) {
       query[Op.or] = [
         { name: { [Op.like]: `%${search}%` } },
-        { description: { [Op.like]: `%${search}%` } },
+        { description: { [Op.like]: `${search}` } },
       ];
     }
 
@@ -42,15 +43,16 @@ module.exports = async (req, res) => {
       }
     }
     if (city) {
-      const findCity = await Store.findOne({
-        where: { city: city },
+      const cities = city.split(','); // split the city string into an array of cities
+      const findCities = await Store.findAll({
+        where: { city: { [Op.in]: cities } }, // use the Op.in operator to match multiple cities
       });
-      if (findCity) {
-        query.storeId = findCity.id;
+      if (findCities.length > 0) {
+        query.storeId = { [Op.in]: findCities.map((c) => c.id) }; // use the Op.in operator to match multiple storeIds
       } else {
-        return res
-          .status(404)
-          .send({ message: 'product with the requested city is not found' });
+        return res.status(404).send({
+          message: 'products with the requested cities are not found',
+        });
       }
     }
     if (minPrice && maxPrice) {
@@ -78,7 +80,7 @@ module.exports = async (req, res) => {
     const product = await Product.findAndCountAll({
       where: query,
       limit: dataPerPage,
-      offset: (currentPage - 1) * dataPerPage,
+      offset: offset,
       attributes: [
         'id',
         'name',
@@ -87,6 +89,7 @@ module.exports = async (req, res) => {
         'stock',
         'averageRatings',
         'totalReview',
+        'createdAt',
       ],
       include: [
         {
@@ -105,6 +108,7 @@ module.exports = async (req, res) => {
         },
       ],
       distinct: true,
+      order: [['createdAt', 'DESC']],
     });
 
     if (product.count === 0) {
@@ -112,6 +116,9 @@ module.exports = async (req, res) => {
     }
     // calculate total page needed
     const totalPages = Math.ceil(product.count / dataPerPage);
+    if (currentPage > totalPages || currentPage < 1) {
+      return res.status(404).send({ message: 'Page not found' });
+    }
 
     const data = product.rows.map((item) => {
       return {
@@ -138,6 +145,7 @@ module.exports = async (req, res) => {
       currentPage,
       dataPerPage,
       totalPages,
+      offset,
     });
   } catch (error) {
     return res.status(500).send(error.message);
