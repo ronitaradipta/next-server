@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
         {
           model: ProductCategory,
           as: 'category',
-          attributes: ['name', 'image'],
+          attributes: ['id', 'name', 'image'],
         },
         {
           model: ProductGalleries,
@@ -58,6 +58,7 @@ module.exports = async (req, res) => {
         storeName: product.store.name,
         storeCity: product.store.city,
         storeImage: product.store.image,
+        categoryId: product.category.id,
         categoryName: product.category.name,
         categoryImage: product.category.image,
         images: product.ProductGalleries,
