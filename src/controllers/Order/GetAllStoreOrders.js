@@ -1,4 +1,10 @@
-const { Order, OrderDetails } = require('../../models');
+const {
+  Order,
+  OrderDetails,
+  Product,
+  ProductGalleries,
+  Store,
+} = require('../../models');
 
 module.exports = async (req, res) => {
   try {
@@ -29,7 +35,29 @@ module.exports = async (req, res) => {
         'shippingStatus',
         'trackingNumber',
       ],
-      include: [{ model: OrderDetails }],
+      include: [
+        {
+          model: OrderDetails,
+          attributes: ['quantity', 'price'],
+          include: [
+            {
+              model: Product,
+              as: 'product',
+              attributes: ['id', 'name', 'price'],
+              include: [
+                { model: ProductGalleries, attributes: ['image'] },
+                {
+                  model: Store,
+                  as: 'store',
+                  attributes: ['id', 'name', 'image', 'city'],
+                },
+              ],
+              distinct: true,
+            },
+          ],
+          distinct: true,
+        },
+      ],
       distinct: true,
     });
 
