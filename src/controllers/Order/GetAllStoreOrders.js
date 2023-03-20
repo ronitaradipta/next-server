@@ -64,6 +64,10 @@ module.exports = async (req, res) => {
     // calculate total page needed
     const totalPages = Math.ceil(orders.count / dataPerPage);
 
+    const totalPending = orders.rows.filter((order) => {
+      return order.shippingStatus === 'new';
+    });
+
     return res.status(200).send({
       message: 'success',
       data: orders.rows,
@@ -71,6 +75,7 @@ module.exports = async (req, res) => {
       currentPage,
       dataPerPage,
       totalPages,
+      statusPending: totalPending.length,
     });
   } catch (error) {
     return res.status(500).send(error.message);
