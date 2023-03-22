@@ -1,4 +1,11 @@
-const { User, Role, Store, Otp, user_profile } = require('../../models');
+const {
+  User,
+  Role,
+  Store,
+  Otp,
+  user_profile,
+  refreshtoken,
+} = require('../../models');
 const jwt = require('jsonwebtoken');
 const speakeasy = require('speakeasy');
 const { Op } = require('sequelize');
@@ -54,30 +61,17 @@ module.exports = async (req, res) => {
     const storeId = user.Store?.id;
     const storeName = user.Store?.name;
     const userAvatar = user.user_profile.avatar;
-    //   generating access token as cookies for authentication
+
     const AccessToken = jwt.sign(
-      { userId, userEmail, userRole, storeId, storeName, userAvatar },
+      { userId, userName, userEmail, userRole, storeId, storeName, userAvatar },
       process.env.ACCESS_TOKEN,
       { expiresIn: '24h' }
     );
 
-    return res
-      .status(200)
-      .cookie('AccessToken', AccessToken, {
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000, // 24 Hours / 1 Days expired
-        secure: true,
-      })
-      .send({
-        message: 'Login is Success',
-        data: {
-          id: userId,
-          userName,
-          userAvatar,
-          storeName,
-          AccessToken,
-        },
-      });
+    return res.status(200).send({
+      message: 'Login is Success',
+      data: AccessToken,
+    });
   } catch (error) {
     return res.status(500).send(error.message);
   }
