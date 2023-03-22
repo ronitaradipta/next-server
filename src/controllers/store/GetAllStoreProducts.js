@@ -1,4 +1,4 @@
-const { Store, Product, ProductCategory } = require('../../models');
+const { Store, Product, ProductCategory, ProductGalleries } = require('../../models');
 
 module.exports = async (req, res) => {
   try {
@@ -12,6 +12,10 @@ module.exports = async (req, res) => {
           model: ProductCategory,
           as: 'category',
           attributes: ['name', 'image'],
+        },
+        {
+          model: ProductGalleries,
+          attributes: ['image'],
         },
       ],
     });
