@@ -70,7 +70,18 @@ module.exports = async (req, res) => {
 
     return res.status(200).send({
       message: 'Login is Success',
-      data: AccessToken,
+      data: {
+        token: AccessToken,
+        user: {
+          userId,
+          userName,
+          userEmail,
+          userRole,
+          storeId,
+          storeName,
+          userAvatar,
+        },
+      },
     });
   } catch (error) {
     return res.status(500).send(error.message);
