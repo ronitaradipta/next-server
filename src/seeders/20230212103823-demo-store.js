@@ -12,6 +12,8 @@ module.exports = {
           description: 'Menjual buku-buku bermutu dengan harga bersaing',
           city: 'Medan',
           status: true,
+          image:
+            'https://res.cloudinary.com/dqcaa6hws/image/upload/v1679580381/images/vm0xbvnnk5tqrmyk5yjk.png',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -21,6 +23,8 @@ module.exports = {
           description: 'Menyediakan segala macam keperluan elektrik',
           city: 'Jakarta',
           status: true,
+          image:
+            'https://res.cloudinary.com/dqcaa6hws/image/upload/v1679580381/images/vm0xbvnnk5tqrmyk5yjk.png',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -30,6 +34,8 @@ module.exports = {
           description: 'Kami menjual frozen food untuk makanan khas daerah',
           city: 'Depok',
           status: true,
+          image:
+            'https://res.cloudinary.com/dqcaa6hws/image/upload/v1679580381/images/vm0xbvnnk5tqrmyk5yjk.png',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -39,6 +45,8 @@ module.exports = {
           description: 'Menjual produk kosmetik serba ada',
           city: 'Surabaya',
           status: true,
+          image:
+            'https://res.cloudinary.com/dqcaa6hws/image/upload/v1679580381/images/vm0xbvnnk5tqrmyk5yjk.png',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -48,15 +56,20 @@ module.exports = {
           description: 'Menjual pakaian asli buatan citayam',
           city: 'Bandung',
           status: true,
+          image:
+            'https://res.cloudinary.com/dqcaa6hws/image/upload/v1679580381/images/vm0xbvnnk5tqrmyk5yjk.png',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           userId: 8,
           name: 'Toko Otomotif Maju',
-          description: 'Toko Khusus Spare part kendaraan roda dua dan empat terlengkap',
+          description:
+            'Toko Khusus Spare part kendaraan roda dua dan empat terlengkap',
           city: 'Jakarta',
           status: true,
+          image:
+            'https://res.cloudinary.com/dqcaa6hws/image/upload/v1679580381/images/vm0xbvnnk5tqrmyk5yjk.png',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -66,6 +79,8 @@ module.exports = {
           description: 'Menjual beraneka Macam Buku',
           city: 'Surabaya',
           status: true,
+          image:
+            'https://res.cloudinary.com/dqcaa6hws/image/upload/v1679580381/images/vm0xbvnnk5tqrmyk5yjk.png',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -75,6 +90,8 @@ module.exports = {
           description: 'Menjual berbagai macam peralatan Elektronik terlengkap',
           city: 'Bogor',
           status: true,
+          image:
+            'https://res.cloudinary.com/dqcaa6hws/image/upload/v1679580381/images/vm0xbvnnk5tqrmyk5yjk.png',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -84,6 +101,8 @@ module.exports = {
           description: 'Menjual Aneka Cemilann Khas Daerah',
           city: 'Bandung',
           status: true,
+          image:
+            'https://res.cloudinary.com/dqcaa6hws/image/upload/v1679580381/images/vm0xbvnnk5tqrmyk5yjk.png',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -93,6 +112,8 @@ module.exports = {
           description: 'Kami menjual barang kosmetik pilihan pasti original',
           city: 'Tangerang',
           status: true,
+          image:
+            'https://res.cloudinary.com/dqcaa6hws/image/upload/v1679580381/images/vm0xbvnnk5tqrmyk5yjk.png',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -102,15 +123,20 @@ module.exports = {
           description: 'Menjual pakaian dan celana kekinian',
           city: 'Medan',
           status: true,
+          image:
+            'https://res.cloudinary.com/dqcaa6hws/image/upload/v1679580381/images/vm0xbvnnk5tqrmyk5yjk.png',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           userId: 14,
           name: 'Toko Engine Sport',
-          description: 'Menjual spare part kendaraan bermotor roda dua pasti ori',
+          description:
+            'Menjual spare part kendaraan bermotor roda dua pasti ori',
           city: 'Surabaya',
           status: true,
+          image:
+            'https://res.cloudinary.com/dqcaa6hws/image/upload/v1679580381/images/vm0xbvnnk5tqrmyk5yjk.png',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
