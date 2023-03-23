@@ -34,7 +34,7 @@ module.exports = {
         },
         {
           name: 'Michael Jackson',
-          email: 'seller01@gmail.com',
+          email: 'rivabayu50@gmail.com',
           password: hashPassword,
           roleId: 3,
           createdAt: new Date(),
