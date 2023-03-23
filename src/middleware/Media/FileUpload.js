@@ -3,15 +3,30 @@ const path = require('path');
 const cloudinary = require('../../utils/cloudinary');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
+// const storage = new CloudinaryStorage({
+//   cloudinary: cloudinary,
+//   params: {
+//     folder: 'images',
+//     format: async (req, file) => 'webp',
+//     public_id: (req, file) => {
+//       const now = Date.now();
+
+//       return now;
+//     },
+//     transformation: [{ width: 350, height: 500, crop: 'limit' }],
+//   },
+// });
+
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'images',
     format: async (req, file) => 'webp',
     public_id: (req, file) => {
-      const now = Date.now();
-
-      return now;
+      const timestamp = Date.now();
+      const filename = file.originalname.replace(/\.[^/.]+$/, ''); // remove file extension
+      const cleanFilename = filename.replace(/\s+/g, '_'); // replace spaces with underscores
+      return `${cleanFilename}_${timestamp}`;
     },
     transformation: [{ width: 350, height: 500, crop: 'limit' }],
   },

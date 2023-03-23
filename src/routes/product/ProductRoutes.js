@@ -19,6 +19,7 @@ router.get('/:id', productController.GetProductById);
 router.put(
   '/:id',
   isAuthenticate,
+
   FileUpload.array('images'),
   productController.UpdateProduct
 );

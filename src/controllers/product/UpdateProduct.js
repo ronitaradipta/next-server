@@ -2,6 +2,7 @@ const { Product, ProductGalleries, sequelize } = require('../../models');
 const removeCloudinaryImage = require('../../utils/removeCloudinaryImage');
 
 module.exports = async (req, res) => {
+  console.log('COBA MENGECEK : ');
   const t = await sequelize.transaction();
   try {
     const { id } = req.params;
@@ -55,7 +56,6 @@ module.exports = async (req, res) => {
       },
       { transaction: t }
     );
-
     const newImages = req.files.map((file) => ({
       image: file.path,
       productId: id,
