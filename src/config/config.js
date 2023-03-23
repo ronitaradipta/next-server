@@ -7,10 +7,10 @@ const {
   DB_USERNAME,
   DB_PASSWORD,
   DB_NAME,
-  DB_USERNAME_PROD,
-  DB_PASSWORD_PROD,
-  DB_NAME_PROD,
-  DB_HOST_PROD,
+  MYSQLUSER,
+  MYSQLPASSWORD,
+  MYSQLDATABASE,
+  MYSQLHOST,
 } = process.env;
 
 module.exports = {
@@ -29,10 +29,10 @@ module.exports = {
   //   dialect: 'mysql',
   // },
   production: {
-    username: DB_USERNAME_PROD,
-    password: DB_PASSWORD_PROD,
-    database: DB_NAME_PROD,
-    host: DB_HOST_PROD,
+    username: MYSQLUSER,
+    password: MYSQLPASSWORD,
+    database: MYSQLDATABASE,
+    host: MYSQLHOST,
     dialect: 'mysql',
   },
 };
