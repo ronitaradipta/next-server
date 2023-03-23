@@ -6,6 +6,7 @@ DB_PASSWORD=database_password
 DB_NAME=database_name
 
 ACCESS_TOKEN=secret_key_for_access_token
+REFRESH_TOKEN=secret_key_for_refresh_token
 
 SERVER_KEY=midtrans_server_key
 CLIENT_KEY=midtrans_client_key
