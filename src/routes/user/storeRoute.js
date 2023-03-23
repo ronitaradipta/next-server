@@ -9,7 +9,7 @@ router.post('/', isAuthenticate, storeController.CreateStore);
 router.get('/', storeController.GetAllStores);
 router.get('/user', isAuthenticate, storeController.GetUserStore);
 
-router.put(
+router.patch(
   '/',
   isAuthenticate,
   FileUpload.single('image'),
