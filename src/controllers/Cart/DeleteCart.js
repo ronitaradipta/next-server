@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
   const userId = req.user.userId;
 
   try {
-    const cart = await Cart.findByPk(id);
+    const cart = await Cart.findOne({ where: { productId: id } });
 
     if (!cart) {
       return res.status(404).json({

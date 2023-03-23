@@ -2,7 +2,6 @@ const { Product, ProductGalleries, sequelize } = require('../../models');
 const removeCloudinaryImage = require('../../utils/removeCloudinaryImage');
 
 module.exports = async (req, res) => {
-  console.log('COBA MENGECEK : ');
   const t = await sequelize.transaction();
   try {
     const { id } = req.params;
@@ -42,33 +41,37 @@ module.exports = async (req, res) => {
       { transaction: t }
     );
 
-    const images = await ProductGalleries.findAll({
-      where: {
-        productId: id,
-      },
-    });
-
-    await ProductGalleries.destroy(
-      {
+    // check if user is attaching new images
+    if (req.files.length) {
+      const images = await ProductGalleries.findAll({
         where: {
           productId: id,
         },
-      },
-      { transaction: t }
-    );
-    const newImages = req.files.map((file) => ({
-      image: file.path,
-      productId: id,
-    }));
-
-    await ProductGalleries.bulkCreate(newImages, { transaction: t });
-
-    t.afterCommit(() => {
-      //delete images from folder images
-      images.forEach(async (image) => {
-        removeCloudinaryImage(image.image);
       });
-    });
+
+      await ProductGalleries.destroy(
+        {
+          where: {
+            productId: id,
+          },
+        },
+        { transaction: t }
+      );
+
+      const newImages = req.files.map((file) => ({
+        image: file.path,
+        productId: id,
+      }));
+
+      await ProductGalleries.bulkCreate(newImages, { transaction: t });
+
+      t.afterCommit(() => {
+        //delete images from folder images
+        images.forEach(async (image) => {
+          removeCloudinaryImage(image.image);
+        });
+      });
+    }
 
     await t.commit();
 

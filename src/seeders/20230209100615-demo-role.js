@@ -8,12 +8,18 @@ module.exports = {
       [
         {
           name: 'Admin',
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         {
           name: 'Customer',
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         {
           name: 'Seller',
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
       ],
       {}

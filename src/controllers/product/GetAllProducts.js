@@ -89,6 +89,7 @@ module.exports = async (req, res) => {
         'stock',
         'averageRatings',
         'totalReview',
+        'createdAt',
       ],
       include: [
         {
@@ -107,6 +108,7 @@ module.exports = async (req, res) => {
         },
       ],
       distinct: true,
+      order: [['createdAt', 'DESC']],
     });
 
     if (product.count === 0) {

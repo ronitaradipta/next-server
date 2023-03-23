@@ -1,4 +1,10 @@
-const { Order, OrderDetails } = require('../../models');
+const {
+  Order,
+  OrderDetails,
+  Product,
+  ProductGalleries,
+  Store,
+} = require('../../models');
 
 module.exports = async (req, res) => {
   try {
@@ -29,12 +35,38 @@ module.exports = async (req, res) => {
         'shippingStatus',
         'trackingNumber',
       ],
-      include: [{ model: OrderDetails }],
+      include: [
+        {
+          model: OrderDetails,
+          attributes: ['quantity', 'price'],
+          include: [
+            {
+              model: Product,
+              as: 'product',
+              attributes: ['id', 'name', 'price'],
+              include: [
+                { model: ProductGalleries, attributes: ['image'] },
+                {
+                  model: Store,
+                  as: 'store',
+                  attributes: ['id', 'name', 'image', 'city'],
+                },
+              ],
+              distinct: true,
+            },
+          ],
+          distinct: true,
+        },
+      ],
       distinct: true,
     });
 
     // calculate total page needed
     const totalPages = Math.ceil(orders.count / dataPerPage);
+
+    const totalPending = orders.rows.filter((order) => {
+      return order.shippingStatus === 'new';
+    });
 
     return res.status(200).send({
       message: 'success',
@@ -43,6 +75,7 @@ module.exports = async (req, res) => {
       currentPage,
       dataPerPage,
       totalPages,
+      statusPending: totalPending.length,
     });
   } catch (error) {
     return res.status(500).send(error.message);

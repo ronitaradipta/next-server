@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.Otp);
       this.hasMany(models.resetPassword);
       this.hasOne(models.user_profile);
+      this.hasOne(models.refreshtoken);
     }
   }
   User.init(
