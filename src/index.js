@@ -41,5 +41,5 @@ app.use('/seller-transactions', user.SellerTransactionsRoute);
 app.use('/services', rajaongkir);
 
 app.listen(process.env.SERVER_PORT, () => {
-  console.log(`Server Running runnong on port ${process.env.MYSQLPORT}`);
+  console.log(`Server Running runnong on port ${process.env.SERVER_PORT}`);
 });
