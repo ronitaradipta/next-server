@@ -17,5 +17,7 @@ router.patch(
 );
 router.delete('/:id', isAuthenticate, isAdmin, storeController.DeleteStore);
 router.get('/:id/products', storeController.GetAllStoreProducts);
+router.get('/products', isAuthenticate, storeController.GetUserStoreProduct);
+router.get('/products/category', isAuthenticate, storeController.GetUserCategoryProduct);
 
 module.exports = router;
