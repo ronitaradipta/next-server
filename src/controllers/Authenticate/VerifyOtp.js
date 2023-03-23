@@ -68,6 +68,27 @@ module.exports = async (req, res) => {
       { expiresIn: '24h' }
     );
 
+    const refreshToken = jwt.sign(
+      { userId, userName, userEmail, userRole, storeId, storeName, userAvatar },
+      process.env.REFRESH_TOKEN,
+      { expiresIn: '48h' }
+    );
+
+    const refreshTokenData = await refreshtoken.findOne({
+      where: { userId: user.id },
+    });
+
+    if (refreshTokenData) {
+      await refreshTokenData.update({ token: refreshToken });
+    } else {
+      await refreshtoken.create({ userId: user.id, token: refreshToken });
+    }
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
     return res.status(200).send({
       message: 'Login is Success',
       data: {
