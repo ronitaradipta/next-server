@@ -3,7 +3,11 @@ const jwt = require('jsonwebtoken');
 
 module.exports = async (req, res) => {
   try {
-    const token = req.query.refresh_token;
+    const token = req.cookies.refreshToken;
+    if (!token) {
+      return res.status(401).send({ message: 'Anauthorized access' });
+    }
+
     const refreshTokenData = await refreshtoken.findOne({
       where: { token },
     });
@@ -23,13 +27,18 @@ module.exports = async (req, res) => {
         }
       }
 
-      const AccessToken = jwt.sign(
-        { data: user.data },
-        process.env.ACCESS_TOKEN,
-        {
-          expiresIn: '24h',
-        }
-      );
+      const payload = {
+        userId: user.userId,
+        userName: user.userName,
+        userRole: user.userRole,
+        storeId: user.storeId,
+        storeName: user.storeName,
+        userAvatar: user.userAvatar,
+      };
+
+      const AccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN, {
+        expiresIn: '1h',
+      });
 
       res.status(200).send({ data: AccessToken });
     });
