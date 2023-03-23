@@ -4,7 +4,7 @@ const removeCloudinaryImage = require('../../utils/removeCloudinaryImage');
 module.exports = async (req, res) => {
   try {
     const { name, description, city, status } = req.body;
-    const image = req.file.path;
+    const image = req.file?.path;
 
     const store = await Store.findOne({
       where: { userId: req.user.userId },
@@ -29,8 +29,10 @@ module.exports = async (req, res) => {
       }
     }
 
-    if (store.image) {
-      removeCloudinaryImage(store.image);
+    if (image) {
+      if (store.image) {
+        removeCloudinaryImage(store.image);
+      }
     }
 
     await store.update({
